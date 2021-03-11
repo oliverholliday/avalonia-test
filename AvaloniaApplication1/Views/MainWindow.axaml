@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AvaloniaApplication1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="850"
+        x:Class="AvaloniaApplication1.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AvaloniaApplication1"
+        >
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <StackPanel Margin="50 20">
+
+        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="0" />
+        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="0" />
+
+        <controls:Squish Height="50" Background="Green" Margin="20" Value="0">
+            <Ellipse Width="20" Height="20" Fill="Orange" />
+        </controls:Squish>
+
+        <controls:Squish Height="50" Background="Green" Margin="20" Value="100">
+            <Ellipse Width="20" Height="20" Fill="Orange" />
+        </controls:Squish>
+
+        <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+            <Ellipse Width="20" Height="20" Fill="Orange" />
+        </controls:Squish>
+
+        <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+            <controls:Squish.Popup>
+                <Border BorderBrush="Red" BorderThickness="5" Background="Blue" MinHeight="0">
+                    <StackPanel>
+                        <TextBlock Text="hello" FontWeight="Bold" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
+                        <UniformGrid HorizontalAlignment="Stretch">
+                            <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
+                            <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+            </controls:Squish.Popup>
+            <Border Width="100" Height="30" Background="Orange">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
+            </Border>
+        </controls:Squish>
+
+        <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+            <Panel>
+                <Ellipse Width="30" Height="30" Fill="Orange" ZIndex="10">
+                    <Ellipse.Styles>
+                        <Style Selector="Ellipse">
+                            <Style.Animations>
+                                <Animation Duration="0:0:4" IterationCount="Infinite">
+                                    <KeyFrame KeyTime="0:0:0">
+                                        <Setter Property="Width" Value="50" />
+                                    </KeyFrame>
+                                    <KeyFrame KeyTime="0:0:2" >
+                                        <Setter Property="Width" Value="20" />
+                                    </KeyFrame>
+                                    <KeyFrame KeyTime="0:0:4" >
+                                        <Setter Property="Width" Value="50" />
+                                    </KeyFrame>
+                                </Animation>
+                            </Style.Animations>
+                        </Style>
+                    </Ellipse.Styles>
+                </Ellipse>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
+            </Panel>
+        </controls:Squish>
+
+        <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
+
+    </StackPanel>
+</Window>

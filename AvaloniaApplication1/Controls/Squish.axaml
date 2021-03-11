@@ -1,0 +1,78 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
+    <Design.PreviewWith>
+        <Border Margin="20 60" Width="400" Height="600" ClipToBounds="False" Padding="0" Background="Yellow">
+            <StackPanel Spacing="60" DockPanel.Dock="Top" ClipToBounds="False">
+                <controls:Squish Value="10" Padding="10" Background="Green" />
+                <controls:Squish Value="10" Padding="10" Background="Green">
+                    <Ellipse Width="20" Height="20" Fill="Red" />
+                </controls:Squish>
+                <controls:Squish Value="50" Padding="0" Background="Green">
+                    <Ellipse Width="20" Height="20" Fill="Red" />
+                </controls:Squish>
+                <controls:Squish Value="100" Padding="0" Background="Green">
+                    <Ellipse Width="20" Height="20" Fill="Red" />
+                </controls:Squish>
+                <controls:Squish Value="0" Margin="20" Padding="0" Background="Green" />
+                <controls:Squish Value="50" Padding="20" Background="Green">
+                    <Button>Hello</Button>
+                </controls:Squish>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|Squish">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Padding" Value="{TemplateBinding Padding}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DataValidationErrors ClipToBounds="False">
+                    <Panel Background="{TemplateBinding Background}">
+                        <StackPanel Name="Slider" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="{TemplateBinding TrackMargin}" VerticalAlignment="Center">
+                            <Button Classes="TrackButton" Name="Before" Width="{TemplateBinding BeforeWidth}" />
+                            <controls:Thumb Name="Thumb">
+                                <ContentPresenter Content="{TemplateBinding Content}" ClipToBounds="False" />
+                            </controls:Thumb>
+                            <Button Classes="TrackButton" Name="After" Width="{TemplateBinding AfterWidth}" />
+                        </StackPanel>
+                        <Canvas>
+                            <Panel Canvas.Left="1" Name="Ghost" Width="30" Height="30" />
+                        </Canvas>
+                    </Panel>
+                </DataValidationErrors>
+            </ControlTemplate>
+        </Setter>
+
+        <Setter Property="Popup">
+            <Template>
+                <Border BorderBrush="Black" BorderThickness="3">
+                    <DockPanel LastChildFill="True" Background="White">
+                        <UniformGrid  DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+                            <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
+                            <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
+                        </UniformGrid>
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold">Set RPM?</TextBlock>
+                            <TextBlock Text="{TemplateBinding Value}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Template>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|Squish Button.TrackButton">
+        <Setter Property="Background" Value="Blue" />
+        <Setter Property="Height" Value="8" />
+    </Style>
+
+    <!--<Style Selector="controls|Squish /template/ controls|Thumb">
+        <Setter Property="Content">
+            <Template>
+                <Ellipse Fill="Yellow" Width="20" Height="20" />
+            </Template>
+        </Setter>
+    </Style>-->
+
+</Styles>

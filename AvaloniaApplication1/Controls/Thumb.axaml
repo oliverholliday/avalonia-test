@@ -1,0 +1,45 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
+
+    <Design.PreviewWith>
+        <Border Margin="20" Width="400" Height="400" ClipToBounds="False" Padding="0" Background="Yellow">
+            <StackPanel Spacing="10" DockPanel.Dock="Top" ClipToBounds="False">
+
+                <controls:Thumb Width="50" Height="50" />
+
+                <controls:Thumb Width="50" Height="50">
+                    <Button>Hello</Button>
+                </controls:Thumb>
+
+                <controls:Thumb Width="50" Height="50">
+                    <Ellipse Width="40" Height="40" Fill="Red" />
+                </controls:Thumb>
+
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|Thumb">
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter
+                    Content="{TemplateBinding Content}"
+                    ClipToBounds="False"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Margin="{TemplateBinding Margin}"
+                    Padding="{TemplateBinding Padding}"
+                />
+            </ControlTemplate>
+        </Setter>
+
+        <Setter Property="Content">
+            <Template>
+                <Ellipse Fill="Purple" Width="20" Height="20" />
+            </Template>
+        </Setter>
+
+    </Style>
+
+</Styles>
