@@ -1,4 +1,4 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StyleInclude Source="avares://AvaloniaApplication1/Controls/Squish.axaml" />
+    <StyleInclude Source="avares://AvaloniaApplication1/Controls/Slider.axaml" />
     <StyleInclude Source="avares://AvaloniaApplication1/Controls/Thumb.axaml" />
 </Styles>

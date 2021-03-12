@@ -15,41 +15,41 @@
 
     <StackPanel Margin="50 20">
 
-        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenConfirmed">
+        <controls:Slider Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenConfirmed">
             <Border Width="40" Height="30" Background="Red">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
             </Border>
-        </controls:Squish>
-        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenDragging">
+        </controls:Slider>
+        <controls:Slider Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenDragging">
             <Border Width="40" Height="30" Background="Orange">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue,  StringFormat={}{0:##0}}" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue,  StringFormat={}{0:##0}}" />
             </Border>
-        </controls:Squish>
-        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenReleased">
+        </controls:Slider>
+        <controls:Slider Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenReleased">
             <Border Width="40" Height="30" Background="Purple">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
             </Border>
-        </controls:Squish>
+        </controls:Slider>
 
-        <controls:Squish ApplyValueChange="WhenConfirmed" Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
-            <controls:Squish.Popup>
+        <controls:Slider ApplyValueChange="WhenConfirmed" Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+            <controls:Slider.Popup>
                 <Border BorderBrush="Red" BorderThickness="5" Background="Blue" MinHeight="0">
                     <StackPanel>
                         <TextBlock Text="hello" FontWeight="Bold" />
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
                         <UniformGrid HorizontalAlignment="Stretch" Rows="1">
                             <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
                             <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
                         </UniformGrid>
                     </StackPanel>
                 </Border>
-            </controls:Squish.Popup>
+            </controls:Slider.Popup>
             <Border Width="100" Height="30" Background="Red">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue, StringFormat={}{0:##0}}" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue, StringFormat={}{0:##0}}" />
             </Border>
-        </controls:Squish>
+        </controls:Slider>
 
-        <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+        <controls:Slider Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
             <Panel>
                 <Ellipse Width="30" Height="30" Fill="Orange">
                     <Ellipse.Styles>
@@ -72,7 +72,7 @@
                 </Ellipse>
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
             </Panel>
-        </controls:Squish>
+        </controls:Slider>
 
         <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
 

@@ -17,7 +17,7 @@ namespace AvaloniaApplication1.Controls
     /// <summary>
     /// The interaction state of the slider.
     /// </summary>
-    public enum SquishState
+    public enum SliderState
     {
         /// <summary>
         /// The slider is idle.
@@ -38,7 +38,7 @@ namespace AvaloniaApplication1.Controls
     /// <summary>
     /// Configures how the Value property is set for interactions.
     /// </summary>
-    public enum SquishApplyValueChange
+    public enum SliderApplyValueChange
     {
         /// <summary>
         /// The value changes constantly during drag.
@@ -56,7 +56,7 @@ namespace AvaloniaApplication1.Controls
         WhenConfirmed
     }
 
-    public class Squish : RangeBase
+    public class Slider : RangeBase
     {
         /// <summary>
         /// How many values does one pixel represent.
@@ -66,7 +66,7 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// Whether the control is normal, dragging or confirming.
         /// </summary>
-        public SquishState State
+        public SliderState State
         {
             get => GetValue(StateProperty);
             set => SetValue(StateProperty, value);
@@ -75,7 +75,7 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// Whether the control prompts to apply the change to Value.
         /// </summary>
-        public SquishApplyValueChange ApplyValueChange
+        public SliderApplyValueChange ApplyValueChange
         {
             get => GetValue(ApplyValueChangeProperty);
             set => SetValue(ApplyValueChangeProperty, value);
@@ -141,8 +141,8 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// Defines the <see cref="UnconfirmedValue"/> property.
         /// </summary>
-        public static readonly DirectProperty<Squish, double> UnconfirmedValueProperty =
-            AvaloniaProperty.RegisterDirect<Squish, double>(
+        public static readonly DirectProperty<Slider, double> UnconfirmedValueProperty =
+            AvaloniaProperty.RegisterDirect<Slider, double>(
                 nameof(UnconfirmedValue),
                 o => o.UnconfirmedValue,
                 (o, v) => o.UnconfirmedValue = v,
@@ -173,15 +173,15 @@ namespace AvaloniaApplication1.Controls
             }
         }
 
-        public static readonly StyledProperty<SquishState> StateProperty = AvaloniaProperty.Register<Squish, SquishState>(nameof(State));
-        public static readonly StyledProperty<SquishApplyValueChange> ApplyValueChangeProperty = AvaloniaProperty.Register<Squish, SquishApplyValueChange>(nameof(ApplyValueChange));
-        public static readonly StyledProperty<IControl?> ContentProperty = AvaloniaProperty.Register<Squish, IControl?>(nameof(Content));
-        public static readonly StyledProperty<IControl?> PopupProperty = AvaloniaProperty.Register<Squish, IControl?>(nameof(Popup));
+        public static readonly StyledProperty<SliderState> StateProperty = AvaloniaProperty.Register<Slider, SliderState>(nameof(State));
+        public static readonly StyledProperty<SliderApplyValueChange> ApplyValueChangeProperty = AvaloniaProperty.Register<Slider, SliderApplyValueChange>(nameof(ApplyValueChange));
+        public static readonly StyledProperty<IControl?> ContentProperty = AvaloniaProperty.Register<Slider, IControl?>(nameof(Content));
+        public static readonly StyledProperty<IControl?> PopupProperty = AvaloniaProperty.Register<Slider, IControl?>(nameof(Popup));
 
-        public static readonly StyledProperty<double> BeforeWidthProperty = AvaloniaProperty.Register<Squish, double>(nameof(BeforeWidth));
-        public static readonly StyledProperty<double> AfterWidthProperty = AvaloniaProperty.Register<Squish, double>(nameof(AfterWidth));
-        public static readonly StyledProperty<double> ThumbWidthProperty = AvaloniaProperty.Register<Squish, double>(nameof(ThumbWidth));
-        public static readonly StyledProperty<Thickness> TrackMarginProperty = AvaloniaProperty.Register<Squish, Thickness>(nameof(TrackMargin));
+        public static readonly StyledProperty<double> BeforeWidthProperty = AvaloniaProperty.Register<Slider, double>(nameof(BeforeWidth));
+        public static readonly StyledProperty<double> AfterWidthProperty = AvaloniaProperty.Register<Slider, double>(nameof(AfterWidth));
+        public static readonly StyledProperty<double> ThumbWidthProperty = AvaloniaProperty.Register<Slider, double>(nameof(ThumbWidth));
+        public static readonly StyledProperty<Thickness> TrackMarginProperty = AvaloniaProperty.Register<Slider, Thickness>(nameof(TrackMargin));
 
         protected Panel Ghost = null!;
         protected IPopupHost? PopupHost;
@@ -189,18 +189,18 @@ namespace AvaloniaApplication1.Controls
         protected Thumb Thumb = null!;
         protected Button After = null!;
 
-        static Squish()
+        static Slider()
         {
-            ValueProperty.Changed.AddClassHandler<Squish>((x, e) => x.UnconfirmedValue = (double?)e.NewValue ?? 0);
+            ValueProperty.Changed.AddClassHandler<Slider>((x, e) => x.UnconfirmedValue = (double?)e.NewValue ?? 0);
 
-            ContentProperty.Changed.AddClassHandler<Squish>((squish, args) => squish.ContentChanged(args));
-            StateProperty.Changed.AddClassHandler<Squish>((squish, args) => squish.OnStateChanged(args));
+            ContentProperty.Changed.AddClassHandler<Slider>((x, e) => x.ContentChanged(e));
+            StateProperty.Changed.AddClassHandler<Slider>((x, e) => x.OnStateChanged(e));
 
-            Thumb.DragStartedEvent.AddClassHandler<Squish>((x, e) => x.OnThumbDragStarted(e), RoutingStrategies.Bubble);
-            Thumb.DragDeltaEvent.AddClassHandler<Squish>((x, e) => x.OnThumbDragDelta(e), RoutingStrategies.Bubble);
-            Thumb.DragCompletedEvent.AddClassHandler<Squish>((x, e) => x.OnThumbDragCompleted(e), RoutingStrategies.Bubble);
+            Thumb.DragStartedEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragStarted(e), RoutingStrategies.Bubble);
+            Thumb.DragDeltaEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragDelta(e), RoutingStrategies.Bubble);
+            Thumb.DragCompletedEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragCompleted(e), RoutingStrategies.Bubble);
 
-            AffectsArrange<Squish>(MinimumProperty, MaximumProperty, UnconfirmedValueProperty, ThumbWidthProperty);
+            AffectsArrange<Slider>(MinimumProperty, MaximumProperty, UnconfirmedValueProperty, ThumbWidthProperty);
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -256,13 +256,13 @@ namespace AvaloniaApplication1.Controls
 
             switch (ApplyValueChange)
             {
-                case SquishApplyValueChange.WhenConfirmed:
-                case SquishApplyValueChange.WhenReleased:
+                case SliderApplyValueChange.WhenConfirmed:
+                case SliderApplyValueChange.WhenReleased:
                     if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
                     break;
             }
 
-            State = SquishState.Dragging;
+            State = SliderState.Dragging;
         }
 
         /// <summary>
@@ -275,17 +275,17 @@ namespace AvaloniaApplication1.Controls
 
             switch (ApplyValueChange)
             {
-                case SquishApplyValueChange.WhenDragging:
+                case SliderApplyValueChange.WhenDragging:
                     Value = e.Vector.X / Density;
                     UnconfirmedValue = Value;
                     break;
-                case SquishApplyValueChange.WhenConfirmed:
-                case SquishApplyValueChange.WhenReleased:
+                case SliderApplyValueChange.WhenConfirmed:
+                case SliderApplyValueChange.WhenReleased:
                     UnconfirmedValue = e.Vector.X / Density;
                     break;
             }
 
-            State = SquishState.Dragging;
+            State = SliderState.Dragging;
         }
 
         /// <summary>
@@ -298,25 +298,25 @@ namespace AvaloniaApplication1.Controls
 
             switch (ApplyValueChange)
             {
-                case SquishApplyValueChange.WhenReleased:
-                case SquishApplyValueChange.WhenDragging:
+                case SliderApplyValueChange.WhenReleased:
+                case SliderApplyValueChange.WhenDragging:
                     Value = e.Vector.X / Density;
                     UnconfirmedValue = Value;
-                    State = SquishState.Idle;
+                    State = SliderState.Idle;
                     Ghost.IsVisible = false;
                     break;
-                case SquishApplyValueChange.WhenConfirmed:
+                case SliderApplyValueChange.WhenConfirmed:
                     UnconfirmedValue = e.Vector.X / Density;
-                    State = SquishState.Confirming;
+                    State = SliderState.Confirming;
                     break;
             }
         }
 
         private void OnStateChanged(AvaloniaPropertyChangedEventArgs args)
         {
-            if (Popup != null && args.NewValue is SquishState state)
+            if (Popup != null && args.NewValue is SliderState state)
             {
-                if (state == SquishState.Confirming)
+                if (state == SliderState.Confirming)
                 {
                     OpenPopup();
                 }
@@ -366,7 +366,7 @@ namespace AvaloniaApplication1.Controls
         {
             if (e.Source is Button button)
             {
-                State = SquishState.Idle;
+                State = SliderState.Idle;
                 Ghost.IsVisible = false;
 
                 if (button.IsDefault)
@@ -404,17 +404,17 @@ namespace AvaloniaApplication1.Controls
 
                 switch (ApplyValueChange)
                 {
-                    case SquishApplyValueChange.WhenReleased:
-                    case SquishApplyValueChange.WhenDragging:
+                    case SliderApplyValueChange.WhenReleased:
+                    case SliderApplyValueChange.WhenDragging:
                         Value += change;
                         UnconfirmedValue = Value;
-                        State = SquishState.Idle;
+                        State = SliderState.Idle;
                         Ghost.IsVisible = false;
                         break;
-                    case SquishApplyValueChange.WhenConfirmed:
+                    case SliderApplyValueChange.WhenConfirmed:
                         if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
                         Thumb.WhenAnyValue(x => x.Bounds).Subscribe(_ => PositionPopup());
-                        State = SquishState.Confirming;
+                        State = SliderState.Confirming;
                         UnconfirmedValue += change;
                         break;
                 }

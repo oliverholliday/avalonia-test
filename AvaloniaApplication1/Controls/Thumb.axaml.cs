@@ -28,7 +28,7 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// Defines the <see cref="Content"/> property.
         /// </summary>
-        public static readonly StyledProperty<IControl?> ContentProperty = AvaloniaProperty.Register<Squish, IControl?>(nameof(Content));
+        public static readonly StyledProperty<IControl?> ContentProperty = AvaloniaProperty.Register<Thumb, IControl?>(nameof(Content));
 
         /// <summary>
         /// The position on the Thumb that the mouse was pressed. Subtracted from the mouse position to get a delta.
