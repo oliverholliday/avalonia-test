@@ -15,8 +15,21 @@
 
     <StackPanel Margin="50 20">
 
-        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="0" />
-        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="0" />
+        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="10" ApplyValueChange="WhenConfirmed">
+            <Border Width="40" Height="30" Background="Orange">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
+            </Border>
+        </controls:Squish>
+        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="0" ApplyValueChange="WhenDragging">
+            <Border Width="40" Height="30" Background="Orange">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
+            </Border>
+        </controls:Squish>
+        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="0" ApplyValueChange="WhenReleased">
+            <Border Width="40" Height="30" Background="Orange">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
+            </Border>
+        </controls:Squish>
 
         <controls:Squish Height="50" Background="Green" Margin="20" Value="0">
             <Ellipse Width="20" Height="20" Fill="Orange" />

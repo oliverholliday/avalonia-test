@@ -30,7 +30,9 @@ namespace AvaloniaApplication1.Controls
         /// </summary>
         public static readonly StyledProperty<IControl?> ContentProperty = AvaloniaProperty.Register<Squish, IControl?>(nameof(Content));
 
-        private Point? _lastPoint;
+        /// <summary>
+        /// The position on the Thumb that the mouse was pressed. Subtracted from the mouse position to get a delta.
+        /// </summary>
         public Point? MouseDownPoint { get; protected set; }
 
         static Thumb()
@@ -89,12 +91,11 @@ namespace AvaloniaApplication1.Controls
             e.Handled = true;
 
             MouseDownPoint = e.GetPosition(this);
-            _lastPoint = e.GetPosition(Parent);
 
             var ev = new VectorEventArgs
             {
                 RoutedEvent = DragStartedEvent,
-                Vector = (Vector)_lastPoint,
+                Vector = e.GetPosition(Parent) - MouseDownPoint!.Value
             };
 
             PseudoClasses.Add(":pressed");
@@ -104,17 +105,16 @@ namespace AvaloniaApplication1.Controls
 
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
         {
-            if (_lastPoint.HasValue)
+            if (MouseDownPoint.HasValue)
             {
                 e.Handled = true;
 
                 var ev = new VectorEventArgs
                 {
                     RoutedEvent = DragCompletedEvent,
-                    Vector = e.GetPosition(Parent) - _lastPoint.Value
+                    Vector = e.GetPosition(Parent) - MouseDownPoint!.Value
                 };
 
-                _lastPoint = null;
                 MouseDownPoint = null;
 
                 RaiseEvent(ev);

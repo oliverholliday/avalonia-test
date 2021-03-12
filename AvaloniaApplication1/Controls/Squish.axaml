@@ -38,7 +38,7 @@
                                 <Button Classes="TrackButton" Name="After" Width="{TemplateBinding AfterWidth}" />
                             </StackPanel>
                             <Panel VerticalAlignment="Center" HorizontalAlignment="Left">
-                                <Panel Name="Ghost" />
+                                <Panel Name="Ghost" IsVisible="False" />
                             </Panel>
                             <StackPanel Name="Slider" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                                 <Panel Width="{TemplateBinding BeforeWidth}" />

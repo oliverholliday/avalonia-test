@@ -22,7 +22,7 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// The slider is idle.
         /// </summary>
-        None,
+        Idle,
 
         /// <summary>
         /// The slider is being dragged.
@@ -195,7 +195,7 @@ namespace AvaloniaApplication1.Controls
             Thumb.DragDeltaEvent.AddClassHandler<Squish>((x, e) => x.OnThumbDragDelta(e), RoutingStrategies.Bubble);
             Thumb.DragCompletedEvent.AddClassHandler<Squish>((x, e) => x.OnThumbDragCompleted(e), RoutingStrategies.Bubble);
 
-            AffectsArrange<Squish>(MinimumProperty, MaximumProperty, ValueProperty, ThumbWidthProperty);
+            AffectsArrange<Squish>(MinimumProperty, MaximumProperty, UnconfirmedValueProperty, ThumbWidthProperty);
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -227,8 +227,8 @@ namespace AvaloniaApplication1.Controls
 
             Density = finalSize.Width / (Maximum - Minimum);
 
-            BeforeWidth = (Value - Minimum) * Density;
-            AfterWidth = (Maximum - Value) * Density;
+            BeforeWidth = (UnconfirmedValue - Minimum) * Density;
+            AfterWidth = (Maximum - UnconfirmedValue) * Density;
 
             return base.ArrangeOverride(finalSize);
         }
@@ -249,7 +249,13 @@ namespace AvaloniaApplication1.Controls
         {
             Debug.WriteLine($"Started dragging {e.Vector.X}, {e.Vector.Y}");
 
-            RenderToGhost(Thumb, Ghost);
+            switch (ApplyValueChange)
+            {
+                case SquishApplyValueChange.WhenConfirmed:
+                case SquishApplyValueChange.WhenReleased:
+                    RenderGhost(Thumb, Ghost);
+                    break;
+            }
 
             State = SquishState.Dragging;
         }
@@ -262,7 +268,18 @@ namespace AvaloniaApplication1.Controls
         {
             Debug.WriteLine($"Still dragging {e.Vector.X}, {e.Vector.Y}");
 
-            Value = e.Vector.X / Density;
+            switch (ApplyValueChange)
+            {
+                case SquishApplyValueChange.WhenDragging:
+                    Value = e.Vector.X / Density;
+                    UnconfirmedValue = Value;
+                    break;
+                case SquishApplyValueChange.WhenConfirmed:
+                case SquishApplyValueChange.WhenReleased:
+                    UnconfirmedValue = e.Vector.X / Density;
+                    break;
+            }
+
             State = SquishState.Dragging;
         }
 
@@ -274,7 +291,20 @@ namespace AvaloniaApplication1.Controls
         {
             Debug.WriteLine($"Stopped dragging {e.Vector.X}, {e.Vector.Y}");
 
-            State = SquishState.Confirming;
+            switch (ApplyValueChange)
+            {
+                case SquishApplyValueChange.WhenReleased:
+                case SquishApplyValueChange.WhenDragging:
+                    Value = e.Vector.X / Density;
+                    UnconfirmedValue = Value;
+                    State = SquishState.Idle;
+                    Ghost.IsVisible = false;
+                    break;
+                case SquishApplyValueChange.WhenConfirmed:
+                    UnconfirmedValue = e.Vector.X / Density;
+                    State = SquishState.Confirming;
+                    break;
+            }
         }
 
         private void OnStateChanged(AvaloniaPropertyChangedEventArgs args)
@@ -313,6 +343,13 @@ namespace AvaloniaApplication1.Controls
             PopupHost.Show();
         }
 
+        private void PositionPopup()
+        {
+            if (Popup == null || PopupHost == null) return;
+            var centeringOffset = (Thumb.Bounds.Width - Popup.Bounds.Width) / 2;
+            PopupHost.ConfigurePosition(Thumb, PlacementMode.Top, new Point(centeringOffset, 0));
+        }
+
         private void ClosePopup()
         {
             if (PopupHost == null) return;
@@ -328,15 +365,18 @@ namespace AvaloniaApplication1.Controls
         {
             if (e.Source is Button button)
             {
-                State = SquishState.None;
+                State = SquishState.Idle;
+                Ghost.IsVisible = false;
 
                 if (button.IsDefault)
                 {
                     Debug.WriteLine("Confirmed!");
+                    Value = UnconfirmedValue;
                 }
                 else
                 {
                     Debug.WriteLine("Cancelled!");
+                    UnconfirmedValue = Value;
                 }
             }
         }
@@ -348,27 +388,49 @@ namespace AvaloniaApplication1.Controls
         {
             if (e.Source is Button button)
             {
+                double change = 0;
                 if (ReferenceEquals(button, Before))
                 {
-                    Value -= LargeChange;
+                    change -= LargeChange;
                     Debug.WriteLine("Before!");
                 }
                 else if (ReferenceEquals(button, After))
                 {
-                    Value += LargeChange;
+                    change += LargeChange;
                     Debug.WriteLine("After!");
+                }
+                else return;
+
+                switch (ApplyValueChange)
+                {
+                    case SquishApplyValueChange.WhenReleased:
+                    case SquishApplyValueChange.WhenDragging:
+                        UnconfirmedValue += change;
+                        Value = UnconfirmedValue;
+                        State = SquishState.Idle;
+                        Ghost.IsVisible = false;
+                        break;
+                    case SquishApplyValueChange.WhenConfirmed:
+//                        if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
+                        State = SquishState.Dragging;
+                        UnconfirmedValue += change;
+                        Popup.InvalidateArrange();
+                        State = SquishState.Confirming;
+                        //PositionPopup();
+                        break;
                 }
             }
         }
 
-        protected void RenderToGhost(Control source, Panel target, double dpi = 96)
+        protected void RenderGhost(Control thumb, Panel ghost)
         {
-            target.Margin = new Thickness(source.Bounds.Left, source.Bounds.Top, 0, 0);
-            target.Width = source.Bounds.Width;
-            target.Height = source.Bounds.Height;
+            ghost.Margin = new Thickness(thumb.Bounds.Left, thumb.Bounds.Top, 0, 0);
+            ghost.Width = thumb.Bounds.Width;
+            ghost.Height = thumb.Bounds.Height;
 
-            var vb = new VisualBrush(source);
-            target.Background = vb;
+            var vb = new VisualBrush(thumb);
+            ghost.Background = vb;
+            ghost.IsVisible = true;
         }
     }
 }
