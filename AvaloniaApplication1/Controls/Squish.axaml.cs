@@ -1,8 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -10,12 +7,8 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Avalonia.Metadata;
-using Avalonia.Platform;
-using Avalonia.Rendering;
 using Avalonia.Utilities;
-using Avalonia.VisualTree;
 using ReactiveUI;
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -65,8 +58,6 @@ namespace AvaloniaApplication1.Controls
 
     public class Squish : RangeBase
     {
-        private IDisposable? _thumbChangeBinding;
-
         public double Density { get; protected set; } = double.NaN;
 
         /// <summary>
@@ -214,33 +205,29 @@ namespace AvaloniaApplication1.Controls
         {
             base.OnApplyTemplate(e);
 
-            //Ghost = e.NameScope.Find<Image>("Ghost");
             Ghost = e.NameScope.Find<Panel>("Ghost");
             Before = e.NameScope.Find<Button>("Before");
             After = e.NameScope.Find<Button>("After");
             Thumb = e.NameScope.Find<Thumb>("Thumb");
-            Thumb.Content = ThumbChild;
 
+            Thumb.Content = ThumbChild;
 
             Popup?.AddHandler<RoutedEventArgs>(Button.ClickEvent, PopupClickHandler);
             Before.AddHandler<RoutedEventArgs>(Button.ClickEvent, ScrollClickHandler);
             After.AddHandler<RoutedEventArgs>(Button.ClickEvent, ScrollClickHandler);
         }
-
+        
         protected void ContentChanged(AvaloniaPropertyChangedEventArgs e)
         {
-            if (e.OldValue is IControl oldChild)
+            if (e.OldValue is IControl)
             {
-                _thumbChangeBinding?.Dispose();
-                LogicalChildren.Remove(oldChild);
                 ThumbChild = null;
             }
 
             if (e.NewValue is IControl newChild)
             {
-                LogicalChildren.Add(newChild);
                 ThumbChild = newChild;
-                _thumbChangeBinding = newChild.WhenAnyValue(x => x.Bounds).Subscribe(x => ThumbWidthChanged(x.Size));
+                newChild.WhenAnyValue(x => x.Bounds).Subscribe(x => ThumbWidthChanged(x.Size));
             }
         }
 
@@ -258,6 +245,8 @@ namespace AvaloniaApplication1.Controls
 
         private void ThumbWidthChanged(Size e)
         {
+            Debug.WriteLine($"Thumb width changed {e.Width} x {e.Height}");
+
             ThumbWidth = e.Width / 2;
             TrackMargin = new Thickness(-ThumbWidth, 0, -ThumbWidth, 0);
         }
