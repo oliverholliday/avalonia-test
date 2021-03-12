@@ -15,54 +15,40 @@
 
     <StackPanel Margin="50 20">
 
-        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="10" ApplyValueChange="WhenConfirmed">
-            <Border Width="40" Height="30" Background="Orange">
+        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenConfirmed">
+            <Border Width="40" Height="30" Background="Red">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
             </Border>
         </controls:Squish>
-        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="0" ApplyValueChange="WhenDragging">
+        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenDragging">
             <Border Width="40" Height="30" Background="Orange">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue,  StringFormat={}{0:##0}}" />
+            </Border>
+        </controls:Squish>
+        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenReleased">
+            <Border Width="40" Height="30" Background="Purple">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
             </Border>
         </controls:Squish>
-        <controls:Squish Height="50" Background="Transparent" Margin="20" Value="0" ApplyValueChange="WhenReleased">
-            <Border Width="40" Height="30" Background="Orange">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
-            </Border>
-        </controls:Squish>
 
-        <controls:Squish Height="50" Background="Green" Margin="20" Value="0">
-            <Ellipse Width="20" Height="20" Fill="Orange" />
-        </controls:Squish>
-
-        <controls:Squish Height="50" Background="Green" Margin="20" Value="100">
-            <Ellipse Width="20" Height="20" Fill="Orange" />
-        </controls:Squish>
-
-        <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
-            <Ellipse Width="20" Height="20" Fill="Orange" />
-        </controls:Squish>
-
-        <Panel>
-            <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
-                <controls:Squish.Popup>
-                    <Border BorderBrush="Red" BorderThickness="5" Background="Blue" MinHeight="0">
-                        <StackPanel>
-                            <TextBlock Text="hello" FontWeight="Bold" />
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
-                            <UniformGrid HorizontalAlignment="Stretch">
-                                <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
-                                <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
-                            </UniformGrid>
-                        </StackPanel>
-                    </Border>
-                </controls:Squish.Popup>
-                <Border Width="100" Height="30" Background="Orange">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
+        <controls:Squish ApplyValueChange="WhenConfirmed" Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+            <controls:Squish.Popup>
+                <Border BorderBrush="Red" BorderThickness="5" Background="Blue" MinHeight="0">
+                    <StackPanel>
+                        <TextBlock Text="hello" FontWeight="Bold" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
+                        <UniformGrid HorizontalAlignment="Stretch">
+                            <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
+                            <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
+                        </UniformGrid>
+                    </StackPanel>
                 </Border>
-            </controls:Squish>
-            
-        </Panel>
+            </controls:Squish.Popup>
+            <Border Width="100" Height="30" Background="Red">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue, StringFormat={}{0:##0}}" />
+            </Border>
+        </controls:Squish>
+
         <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
             <Panel>
                 <Ellipse Width="30" Height="30" Fill="Orange">

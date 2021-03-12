@@ -339,11 +339,7 @@ namespace AvaloniaApplication1.Controls
             PopupHost.SetChild(Popup);
             ((ISetLogicalParent)PopupHost).SetParent(this);
 
-            Popup.WhenAnyValue(x => x.Bounds).Subscribe(bounds =>
-            {
-                var centeringOffset = (Thumb.Bounds.Width - bounds.Width) / 2;
-                PopupHost.ConfigurePosition(Thumb, PlacementMode.Top, new Point(centeringOffset, 0));
-            });
+            Popup.WhenAnyValue(x => x.Bounds).Subscribe(_ => PositionPopup());
 
             PopupHost.Show();
         }
