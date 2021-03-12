@@ -33,9 +33,7 @@
                     <Panel Background="{TemplateBinding Background}">
                         <StackPanel Name="Slider" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="{TemplateBinding TrackMargin}" VerticalAlignment="Center">
                             <Button Classes="TrackButton" Name="Before" Width="{TemplateBinding BeforeWidth}" />
-                            <controls:Thumb Name="Thumb">
-                                <ContentPresenter Content="{TemplateBinding Content}" ClipToBounds="False" />
-                            </controls:Thumb>
+                            <controls:Thumb Name="Thumb" Content="{TemplateBinding Content}" />
                             <Button Classes="TrackButton" Name="After" Width="{TemplateBinding AfterWidth}" />
                         </StackPanel>
                         <Canvas>
@@ -84,7 +82,7 @@
     <Style Selector="controls|Squish /template/ controls|Thumb">
         <Setter Property="Template">
             <ControlTemplate>
-                <Ellipse Fill="Yellow" Width="20" Height="20" />
+                <Ellipse Fill="Black" Width="20" Height="20" />
             </ControlTemplate>
         </Setter>
     </Style>

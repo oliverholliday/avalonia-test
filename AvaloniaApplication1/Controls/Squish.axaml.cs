@@ -180,14 +180,11 @@ namespace AvaloniaApplication1.Controls
         public static readonly StyledProperty<double> ThumbWidthProperty = AvaloniaProperty.Register<Squish, double>(nameof(ThumbWidth));
         public static readonly StyledProperty<Thickness> TrackMarginProperty = AvaloniaProperty.Register<Squish, Thickness>(nameof(TrackMargin));
 
-        //protected Image Ghost = null!;
         protected Panel Ghost = null!;
-
         protected IPopupHost? PopupHost;
         protected Button Before = null!;
         protected Thumb Thumb = null!;
         protected Button After = null!;
-        protected IControl? ThumbChild;
 
         static Squish()
         {
@@ -210,23 +207,15 @@ namespace AvaloniaApplication1.Controls
             After = e.NameScope.Find<Button>("After");
             Thumb = e.NameScope.Find<Thumb>("Thumb");
 
-            Thumb.Content = ThumbChild;
-
             Popup?.AddHandler<RoutedEventArgs>(Button.ClickEvent, PopupClickHandler);
             Before.AddHandler<RoutedEventArgs>(Button.ClickEvent, ScrollClickHandler);
             After.AddHandler<RoutedEventArgs>(Button.ClickEvent, ScrollClickHandler);
         }
-        
+
         protected void ContentChanged(AvaloniaPropertyChangedEventArgs e)
         {
-            if (e.OldValue is IControl)
-            {
-                ThumbChild = null;
-            }
-
             if (e.NewValue is IControl newChild)
             {
-                ThumbChild = newChild;
                 newChild.WhenAnyValue(x => x.Bounds).Subscribe(x => ThumbWidthChanged(x.Size));
             }
         }
