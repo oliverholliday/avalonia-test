@@ -31,14 +31,21 @@
             <ControlTemplate>
                 <DataValidationErrors ClipToBounds="False">
                     <Panel Background="{TemplateBinding Background}">
-                        <StackPanel Name="Slider" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="{TemplateBinding TrackMargin}" VerticalAlignment="Center">
-                            <Button Classes="TrackButton" Name="Before" Width="{TemplateBinding BeforeWidth}" />
-                            <controls:Thumb Name="Thumb" Content="{TemplateBinding Content}" />
-                            <Button Classes="TrackButton" Name="After" Width="{TemplateBinding AfterWidth}" />
-                        </StackPanel>
-                        <Canvas>
-                            <Panel Canvas.Left="1" Name="Ghost" Width="30" Height="30" />
-                        </Canvas>
+                        <Panel Margin="{TemplateBinding TrackMargin}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                <Button Classes="TrackButton" Name="Before" Width="{TemplateBinding BeforeWidth}" />
+                                <Panel Width="{TemplateBinding ThumbWidth}" />
+                                <Button Classes="TrackButton" Name="After" Width="{TemplateBinding AfterWidth}" />
+                            </StackPanel>
+                            <Panel VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Panel Name="Ghost" />
+                            </Panel>
+                            <StackPanel Name="Slider" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                <Panel Width="{TemplateBinding BeforeWidth}" />
+                                <controls:Thumb Name="Thumb" Content="{TemplateBinding Content}" />
+                                <Panel Width="{TemplateBinding AfterWidth}" />
+                            </StackPanel>
+                        </Panel>
                     </Panel>
                 </DataValidationErrors>
             </ControlTemplate>
@@ -74,6 +81,13 @@
     <Style Selector="controls|Squish Button.TrackButton">
         <Setter Property="Background" Value="Blue" />
         <Setter Property="Height" Value="8" />
+    </Style>
+
+    <Style Selector="controls|Squish Panel#Ghost">
+        <Setter Property="Background" Value="Red" />
+        <Setter Property="Width" Value="10" />
+        <Setter Property="Height" Value="10" />
+        <Setter Property="Opacity" Value="0.7" />
     </Style>
 
 

@@ -206,6 +206,7 @@ namespace AvaloniaApplication1.Controls
             Before = e.NameScope.Find<Button>("Before");
             After = e.NameScope.Find<Button>("After");
             Thumb = e.NameScope.Find<Thumb>("Thumb");
+            ThumbWidthChanged(Thumb.Bounds.Size);
 
             Popup?.AddHandler<RoutedEventArgs>(Button.ClickEvent, PopupClickHandler);
             Before.AddHandler<RoutedEventArgs>(Button.ClickEvent, ScrollClickHandler);
@@ -236,8 +237,8 @@ namespace AvaloniaApplication1.Controls
         {
             Debug.WriteLine($"Thumb width changed {e.Width} x {e.Height}");
 
-            ThumbWidth = e.Width / 2;
-            TrackMargin = new Thickness(-ThumbWidth, 0, -ThumbWidth, 0);
+            ThumbWidth = e.Width;
+            TrackMargin = new Thickness(-ThumbWidth / 2, 0, -ThumbWidth / 2, 0);
         }
 
         /// <summary>
@@ -247,6 +248,8 @@ namespace AvaloniaApplication1.Controls
         public virtual void OnThumbDragStarted(VectorEventArgs e)
         {
             Debug.WriteLine($"Started dragging {e.Vector.X}, {e.Vector.Y}");
+
+            RenderToGhost(Thumb, Ghost);
 
             State = SquishState.Dragging;
         }
@@ -281,7 +284,6 @@ namespace AvaloniaApplication1.Controls
                 if (state == SquishState.Confirming)
                 {
                     OpenPopup();
-                    RenderToGhost(Thumb, Ghost);
                 }
                 else
                 {
@@ -361,6 +363,7 @@ namespace AvaloniaApplication1.Controls
 
         protected void RenderToGhost(Control source, Panel target, double dpi = 96)
         {
+            target.Margin = new Thickness(source.Bounds.Left, source.Bounds.Top, 0, 0);
             target.Width = source.Bounds.Width;
             target.Height = source.Bounds.Height;
 

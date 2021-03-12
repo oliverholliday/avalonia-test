@@ -7,8 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="850"
         x:Class="AvaloniaApplication1.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication1"
-        >
+        Title="AvaloniaApplication1">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
