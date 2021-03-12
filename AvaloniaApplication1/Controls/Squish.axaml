@@ -53,18 +53,22 @@
 
         <Setter Property="Popup">
             <Template>
-                <Border BorderBrush="Black" BorderThickness="3">
-                    <DockPanel LastChildFill="True" Background="White">
-                        <UniformGrid  DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
-                            <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
-                            <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
-                        </UniformGrid>
-                        <StackPanel>
-                            <TextBlock FontWeight="Bold">Set RPM?</TextBlock>
-                            <TextBlock Text="{TemplateBinding Value}" />
+                <DockPanel>
+                    <Border BorderBrush="Black" BorderThickness="3" Background="White">
+                        <StackPanel Margin="10" Spacing="10">
+                            <TextBlock FontWeight="Bold">Set Value?</TextBlock>
+                            <TextBlock Text="{Binding UnconfirmedValue}" />
+                            <UniformGrid HorizontalAlignment="Stretch" Rows="1" Columns="2">
+                                <Button HorizontalAlignment="Stretch" IsCancel="True">
+                                    <TextBlock HorizontalAlignment="Center">Cancel</TextBlock>
+                                </Button>
+                                <Button HorizontalAlignment="Stretch" IsDefault="True">
+                                    <TextBlock HorizontalAlignment="Center">OK</TextBlock>
+                                </Button>
+                            </UniformGrid>
                         </StackPanel>
-                    </DockPanel>
-                </Border>
+                    </Border>
+                </DockPanel>
             </Template>
         </Setter>
 
