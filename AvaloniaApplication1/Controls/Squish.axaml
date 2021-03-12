@@ -91,7 +91,7 @@
     </Style>
 
 
-    <!-- This is required to get any thumb content on the Squish.axaml 
+    <!-- This is required to get any thumb content on the Squish.axaml
             design preview. The passed in Content isn't used. -->
     <Style Selector="controls|Squish /template/ controls|Thumb">
         <Setter Property="Template">

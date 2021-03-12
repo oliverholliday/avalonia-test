@@ -43,27 +43,29 @@
             <Ellipse Width="20" Height="20" Fill="Orange" />
         </controls:Squish>
 
-        <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
-            <controls:Squish.Popup>
-                <Border BorderBrush="Red" BorderThickness="5" Background="Blue" MinHeight="0">
-                    <StackPanel>
-                        <TextBlock Text="hello" FontWeight="Bold" />
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
-                        <UniformGrid HorizontalAlignment="Stretch">
-                            <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
-                            <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
-                        </UniformGrid>
-                    </StackPanel>
+        <Panel>
+            <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+                <controls:Squish.Popup>
+                    <Border BorderBrush="Red" BorderThickness="5" Background="Blue" MinHeight="0">
+                        <StackPanel>
+                            <TextBlock Text="hello" FontWeight="Bold" />
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
+                            <UniformGrid HorizontalAlignment="Stretch">
+                                <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
+                                <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+                </controls:Squish.Popup>
+                <Border Width="100" Height="30" Background="Orange">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
                 </Border>
-            </controls:Squish.Popup>
-            <Border Width="100" Height="30" Background="Orange">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
-            </Border>
-        </controls:Squish>
-
-        <!--<controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+            </controls:Squish>
+            
+        </Panel>
+        <controls:Squish Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
             <Panel>
-                <Ellipse Width="30" Height="30" Fill="Orange" ZIndex="10">
+                <Ellipse Width="30" Height="30" Fill="Orange">
                     <Ellipse.Styles>
                         <Style Selector="Ellipse">
                             <Style.Animations>
@@ -82,9 +84,9 @@
                         </Style>
                     </Ellipse.Styles>
                 </Ellipse>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
             </Panel>
-        </controls:Squish>-->
+        </controls:Squish>
 
         <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
 

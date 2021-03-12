@@ -51,13 +51,16 @@ namespace AvaloniaApplication1.Controls
         WhenReleased,
 
         /// <summary>
-        /// When the thumb is released the confirmation popup is displayed before setting the value.
+        /// When the thumb is released the confirmation popup is displayed before setting Value.
         /// </summary>
         WhenConfirmed
     }
 
     public class Squish : RangeBase
     {
+        /// <summary>
+        /// How many values does one pixel represent.
+        /// </summary>
         public double Density { get; protected set; } = double.NaN;
 
         /// <summary>
@@ -188,6 +191,8 @@ namespace AvaloniaApplication1.Controls
 
         static Squish()
         {
+            ValueProperty.Changed.AddClassHandler<Squish>((x, e) => x.UnconfirmedValue = (double?)e.NewValue ?? 0);
+
             ContentProperty.Changed.AddClassHandler<Squish>((squish, args) => squish.ContentChanged(args));
             StateProperty.Changed.AddClassHandler<Squish>((squish, args) => squish.OnStateChanged(args));
 
@@ -253,7 +258,7 @@ namespace AvaloniaApplication1.Controls
             {
                 case SquishApplyValueChange.WhenConfirmed:
                 case SquishApplyValueChange.WhenReleased:
-                    RenderGhost(Thumb, Ghost);
+                    if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
                     break;
             }
 
@@ -405,18 +410,16 @@ namespace AvaloniaApplication1.Controls
                 {
                     case SquishApplyValueChange.WhenReleased:
                     case SquishApplyValueChange.WhenDragging:
-                        UnconfirmedValue += change;
-                        Value = UnconfirmedValue;
+                        Value += change;
+                        UnconfirmedValue = Value;
                         State = SquishState.Idle;
                         Ghost.IsVisible = false;
                         break;
                     case SquishApplyValueChange.WhenConfirmed:
-//                        if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
-                        State = SquishState.Dragging;
-                        UnconfirmedValue += change;
-                        Popup.InvalidateArrange();
+                        if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
+                        Thumb.WhenAnyValue(x => x.Bounds).Subscribe(_ => PositionPopup());
                         State = SquishState.Confirming;
-                        //PositionPopup();
+                        UnconfirmedValue += change;
                         break;
                 }
             }
