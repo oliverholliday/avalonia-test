@@ -37,7 +37,7 @@
                     <StackPanel>
                         <TextBlock Text="hello" FontWeight="Bold" />
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Squish].UnconfirmedValue}" />
-                        <UniformGrid HorizontalAlignment="Stretch">
+                        <UniformGrid HorizontalAlignment="Stretch" Rows="1">
                             <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
                             <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
                         </UniformGrid>
