@@ -16,6 +16,7 @@
     <StackPanel Margin="50 20">
 
         <StackPanel Orientation="Vertical">
+            <controls:TickMarks Height="10" ClipToBounds="True" Minimum="10000" Maximum="100000" LargeChange="10000" SmallChange="2000" />
             <controls:NumberedTicks
                 Margin="0"
                 Minimum="0"

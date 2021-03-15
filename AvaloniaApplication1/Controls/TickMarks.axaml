@@ -7,7 +7,7 @@
                 <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" SmallChange="10" LargeChange="25" />
                 <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" LargeChange="25" />
                 <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" MajorTicks="0, 100" />
-                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="10000" Maximum="100000" LargeChange="10000" SmallChange="2000" />
+                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="10000" Maximum="100000" LargeChange="10000" SmallChange="2000" MinorTickBrush="orange" />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
