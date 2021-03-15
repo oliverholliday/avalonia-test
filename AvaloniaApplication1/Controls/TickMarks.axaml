@@ -1,0 +1,28 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
+
+    <Design.PreviewWith>
+        <Border Margin="20" Width="800" Height="130" ClipToBounds="False" Padding="0" BorderBrush="Red" BorderThickness="1">
+            <StackPanel Spacing="20" ClipToBounds="False">
+                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" MajorTicks="0, 10, 20, 50, 75, 100" MinorTickInner="0" MinorTickOuter="100" SmallChange="10" />
+                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" SmallChange="10" LargeChange="25" />
+                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" LargeChange="25" />
+                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" MajorTicks="0, 100" />
+                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="10000" Maximum="100000" LargeChange="10000" SmallChange="2000" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|TickMarks">
+
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="Background" Value="{TemplateBinding Background}" />
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Canvas Name="PART_Canvas" />
+            </ControlTemplate>
+        </Setter>
+
+    </Style>
+
+</Styles>

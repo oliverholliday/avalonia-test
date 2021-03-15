@@ -3,13 +3,9 @@ using System.Diagnostics;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Metadata;
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace AvaloniaApplication1.Controls
@@ -23,7 +19,7 @@ namespace AvaloniaApplication1.Controls
 
         protected Canvas? Canvas;
 
-        public AvaloniaList<double> Ticks
+        public AvaloniaList<double>? Ticks
         {
             get => GetValue(TicksProperty);
             set => SetValue(TicksProperty, value);
@@ -35,7 +31,7 @@ namespace AvaloniaApplication1.Controls
             set => SetValue(TickLabelFormatProperty, value);
         }
         
-        public static readonly StyledProperty<AvaloniaList<double>> TicksProperty = AvaloniaProperty.Register<NumberedTicks, AvaloniaList<double>>(nameof(Ticks));
+        public static readonly StyledProperty<AvaloniaList<double>?> TicksProperty = AvaloniaProperty.Register<NumberedTicks, AvaloniaList<double>?>(nameof(Ticks));
         public static readonly StyledProperty<string> TickLabelFormatProperty = AvaloniaProperty.Register<NumberedTicks, string>(nameof(TickLabelFormat), "N0");
 
         public AvaloniaList<TextBlock> Labels { get; protected set; } = new AvaloniaList<TextBlock>();
@@ -44,7 +40,12 @@ namespace AvaloniaApplication1.Controls
 
         static NumberedTicks()
         {
-            AffectsArrange<NumberedTicks>(MinimumProperty, MaximumProperty, TicksProperty, BoundsProperty);
+            AffectsArrange<NumberedTicks>(
+                MinimumProperty,
+                MaximumProperty,
+                TicksProperty,
+                BoundsProperty
+            );
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

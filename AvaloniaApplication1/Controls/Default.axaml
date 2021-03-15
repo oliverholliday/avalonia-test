@@ -2,4 +2,5 @@
     <StyleInclude Source="avares://AvaloniaApplication1/Controls/Slider.axaml" />
     <StyleInclude Source="avares://AvaloniaApplication1/Controls/Thumb.axaml" />
     <StyleInclude Source="avares://AvaloniaApplication1/Controls/NumberedTicks.axaml" />
+    <StyleInclude Source="avares://AvaloniaApplication1/Controls/TickMarks.axaml" />
 </Styles>

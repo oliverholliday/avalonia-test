@@ -15,23 +15,37 @@
 
     <StackPanel Margin="50 20">
 
-        <controls:NumberedTicks
-            Margin="0"
-            Background="Yellow"
-            Minimum="0"
-            Maximum="100"
-            Ticks="0, 10, 20, 30, 40"
-            Foreground="Red"
-            FontWeight="Bold"
-        />
-
+        <StackPanel Orientation="Vertical">
+            <controls:NumberedTicks
+                Margin="0"
+                Minimum="0"
+                Maximum="100"
+                Ticks="0, 10, 20, 30, 40"
+                Foreground="Red"
+                FontWeight="Bold"
+                Height="20"
+            />
+            <controls:TickMarks
+                Minimum="0"
+                Maximum="100"
+                SmallChange="10"
+                LargeChange="20"
+                MajorTickBrush="Orange"
+                MajorTickOuter="20"
+                MinorTickOuter="7"
+                MinorTickBrush="Red"
+                Height="20"
+                ClipToBounds="False"
+                RenderMinorTickAtMajorTick="False"
+            />
+        </StackPanel>
         <controls:Slider Height="50" Background="Transparent" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenConfirmed">
             <Border Width="40" Height="30" Background="Red">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
             </Border>
         </controls:Slider>
 
-        <controls:NumberedTicks
+        <!--<controls:NumberedTicks
             Margin="20"
             Background="Yellow"
             Minimum="0"
@@ -104,7 +118,7 @@
                 </Ellipse>
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
             </Panel>
-        </controls:Slider>
+        </controls:Slider>-->
 
         <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
 
