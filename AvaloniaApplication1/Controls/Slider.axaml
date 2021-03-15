@@ -4,7 +4,7 @@
 
         <Border Margin="20 60" Width="400" Height="600" ClipToBounds="False" Padding="0" Background="Yellow">
             <StackPanel Spacing="60" DockPanel.Dock="Top" ClipToBounds="False">
-                <controls:Slider Value="10" Padding="10" Background="Green" />
+                <controls:Slider Value="10" Padding="10" Background="Green" Margin="10" />
                 <controls:Slider Value="10" Padding="10" Background="Green">
                     <Ellipse Width="20" Height="20" Fill="Red" />
                 </controls:Slider>

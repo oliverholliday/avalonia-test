@@ -1,0 +1,34 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
+
+    <Design.PreviewWith>
+        <Border Margin="20" Width="600" Height="400" ClipToBounds="False" Padding="0" Background="Yellow">
+            <StackPanel Spacing="20" ClipToBounds="False">
+
+                <controls:NumberedTicks Background="Red" Minimum="0" Maximum="100" Ticks="0, 10, 20, 50, 75, 100" />
+                <controls:NumberedTicks Background="Red" Minimum="0" Maximum="100" />
+                <controls:NumberedTicks Background="Red" Minimum="0" Maximum="100" LargeChange="25" />
+                <controls:NumberedTicks Background="Red" Minimum="0" Maximum="100" Ticks="0, 100" />
+                <controls:NumberedTicks Background="Red" Minimum="10000" Maximum="100000" LargeChange="10000" />
+
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|NumberedTicks">
+
+        <Setter Property="ClipToBounds" Value="False" />
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Canvas
+                    Name="PART_Canvas"
+                    ClipToBounds="False"
+                    Background="{TemplateBinding Background}"
+                />
+            </ControlTemplate>
+        </Setter>
+
+
+    </Style>
+
+</Styles>
