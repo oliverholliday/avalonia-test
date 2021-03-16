@@ -94,6 +94,15 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// The control used as the draggable thumb.
         /// </summary>
+        public IControl? Thumb
+        {
+            get => GetValue(ThumbProperty);
+            set => SetValue(ThumbProperty, value);
+        }
+
+        /// <summary>
+        /// The content to be positioned within the frame of the slider.
+        /// </summary>
         [Content]
         public IControl? Content
         {
@@ -187,6 +196,7 @@ namespace AvaloniaApplication1.Controls
         public static readonly StyledProperty<SliderState> StateProperty = AvaloniaProperty.Register<Slider, SliderState>(nameof(State));
         public static readonly StyledProperty<SliderApplyValueChange> ApplyValueChangeProperty = AvaloniaProperty.Register<Slider, SliderApplyValueChange>(nameof(ApplyValueChange));
         public static readonly StyledProperty<IControl?> ContentProperty = AvaloniaProperty.Register<Slider, IControl?>(nameof(Content));
+        public static readonly StyledProperty<IControl?> ThumbProperty = AvaloniaProperty.Register<Slider, IControl?>(nameof(Thumb));
         public static readonly StyledProperty<IControl?> PopupProperty = AvaloniaProperty.Register<Slider, IControl?>(nameof(Popup));
         public static readonly StyledProperty<double> BeforeWidthProperty = AvaloniaProperty.Register<Slider, double>(nameof(BeforeWidth));
         public static readonly StyledProperty<double> AfterWidthProperty = AvaloniaProperty.Register<Slider, double>(nameof(AfterWidth));
@@ -196,21 +206,25 @@ namespace AvaloniaApplication1.Controls
         protected Panel Ghost = null!;
         protected IPopupHost? PopupHost;
         protected Button Before = null!;
-        protected Thumb Thumb = null!;
+        protected Thumb ThumbControl = null!;
         protected Button After = null!;
 
         static Slider()
         {
             ValueProperty.Changed.AddClassHandler<Slider>((x, e) => x.UnconfirmedValue = (double?)e.NewValue ?? 0);
-
-            ContentProperty.Changed.AddClassHandler<Slider>((x, e) => x.ContentChanged(e));
+            ThumbProperty.Changed.AddClassHandler<Slider>((x, e) => x.ThumbChanged(e));
             StateProperty.Changed.AddClassHandler<Slider>((x, e) => x.OnStateChanged(e));
 
-            Thumb.DragStartedEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragStarted(e), RoutingStrategies.Bubble);
-            Thumb.DragDeltaEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragDelta(e), RoutingStrategies.Bubble);
-            Thumb.DragCompletedEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragCompleted(e), RoutingStrategies.Bubble);
+            Controls.Thumb.DragStartedEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragStarted(e), RoutingStrategies.Bubble);
+            Controls.Thumb.DragDeltaEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragDelta(e), RoutingStrategies.Bubble);
+            Controls.Thumb.DragCompletedEvent.AddClassHandler<Slider>((x, e) => x.OnThumbDragCompleted(e), RoutingStrategies.Bubble);
 
-            AffectsArrange<Slider>(MinimumProperty, MaximumProperty, UnconfirmedValueProperty, ThumbWidthProperty);
+            AffectsArrange<Slider>(
+                MinimumProperty,
+                MaximumProperty,
+                UnconfirmedValueProperty,
+                ThumbWidthProperty
+            );
         }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -220,15 +234,15 @@ namespace AvaloniaApplication1.Controls
             Ghost = e.NameScope.Find<Panel>("Ghost");
             Before = e.NameScope.Find<Button>("Before");
             After = e.NameScope.Find<Button>("After");
-            Thumb = e.NameScope.Find<Thumb>("Thumb");
-            ThumbWidthChanged(Thumb.Bounds.Size);
+            ThumbControl = e.NameScope.Find<Thumb>("Thumb");
+            ThumbWidthChanged(ThumbControl.Bounds.Size);
 
             Popup?.AddHandler<RoutedEventArgs>(Button.ClickEvent, PopupClickHandler);
             Before.AddHandler<RoutedEventArgs>(Button.ClickEvent, ScrollClickHandler);
             After.AddHandler<RoutedEventArgs>(Button.ClickEvent, ScrollClickHandler);
         }
 
-        protected void ContentChanged(AvaloniaPropertyChangedEventArgs e)
+        protected void ThumbChanged(AvaloniaPropertyChangedEventArgs e)
         {
             if (e.NewValue is IControl newChild)
             {
@@ -257,7 +271,7 @@ namespace AvaloniaApplication1.Controls
         }
 
         /// <summary>
-        /// Called when user start dragging the <see cref="Thumb"/>.
+        /// Called when user start dragging the <see cref="ThumbControl"/>.
         /// </summary>
         /// <param name="e"></param>
         public virtual void OnThumbDragStarted(VectorEventArgs e)
@@ -268,7 +282,7 @@ namespace AvaloniaApplication1.Controls
             {
                 case SliderApplyValueChange.WhenConfirmed:
                 case SliderApplyValueChange.WhenReleased:
-                    if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
+                    if (!Ghost.IsVisible) RenderGhost(ThumbControl, Ghost);
                     break;
             }
 
@@ -276,7 +290,7 @@ namespace AvaloniaApplication1.Controls
         }
 
         /// <summary>
-        /// Called when user drags the <see cref="Thumb"/>.
+        /// Called when user drags the <see cref="ThumbControl"/>.
         /// </summary>
         /// <param name="e"></param>
         public virtual void OnThumbDragDelta(VectorEventArgs e)
@@ -299,7 +313,7 @@ namespace AvaloniaApplication1.Controls
         }
 
         /// <summary>
-        /// Called when user stop dragging the <see cref="Thumb"/>.
+        /// Called when user stop dragging the <see cref="ThumbControl"/>.
         /// </summary>
         /// <param name="e"></param>
         public virtual void OnThumbDragCompleted(VectorEventArgs e)
@@ -357,8 +371,8 @@ namespace AvaloniaApplication1.Controls
         private void PositionPopup()
         {
             if (Popup == null || PopupHost == null) return;
-            var centeringOffset = (Thumb.Bounds.Width - Popup.Bounds.Width) / 2;
-            PopupHost.ConfigurePosition(Thumb, PlacementMode.Top, new Point(centeringOffset, 0));
+            var centeringOffset = (ThumbControl.Bounds.Width - Popup.Bounds.Width) / 2;
+            PopupHost.ConfigurePosition(ThumbControl, PlacementMode.Top, new Point(centeringOffset, 0));
         }
 
         private void ClosePopup()
@@ -422,8 +436,8 @@ namespace AvaloniaApplication1.Controls
                         Ghost.IsVisible = false;
                         break;
                     case SliderApplyValueChange.WhenConfirmed:
-                        if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
-                        Thumb.WhenAnyValue(x => x.Bounds).Subscribe(_ => PositionPopup());
+                        if (!Ghost.IsVisible) RenderGhost(ThumbControl, Ghost);
+                        ThumbControl.WhenAnyValue(x => x.Bounds).Subscribe(_ => PositionPopup());
                         State = SliderState.Confirming;
                         UnconfirmedValue = SnapValueToTick(UnconfirmedValue + change);
                         break;

@@ -16,7 +16,9 @@
                 </controls:Slider>
                 <controls:Slider Value="0" Margin="20" Padding="0" Background="Green" />
                 <controls:Slider Value="50" Padding="20" Background="Green">
-                    <Button>Hello</Button>
+                    <controls:Slider.Thumb>
+                        <Button>Hello</Button>
+                    </controls:Slider.Thumb>
                 </controls:Slider>
             </StackPanel>
         </Border>
@@ -31,6 +33,7 @@
             <ControlTemplate>
                 <DataValidationErrors ClipToBounds="False">
                     <Panel Background="{TemplateBinding Background}">
+                        <ContentPresenter Content="{TemplateBinding Content}" />
                         <Panel Margin="{TemplateBinding TrackMargin}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                                 <Button Classes="TrackButton" Name="Before" Width="{TemplateBinding BeforeWidth}" />
@@ -42,7 +45,7 @@
                             </Panel>
                             <StackPanel Name="Slider" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                                 <Panel Width="{TemplateBinding BeforeWidth}" />
-                                <controls:Thumb Name="Thumb" Content="{TemplateBinding Content}" />
+                                <controls:Thumb Name="Thumb" Content="{TemplateBinding Thumb}" />
                                 <Panel Width="{TemplateBinding AfterWidth}" />
                             </StackPanel>
                         </Panel>
@@ -74,7 +77,7 @@
 
         <!-- This is required to get default content for the thumb
                 the default content from Thumb.axaml isn't used. -->
-        <Setter Property="Content">
+        <Setter Property="Thumb">
             <Template>
                 <Ellipse Fill="Red" Width="20" Height="20" />
             </Template>
