@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Avalonia.Collections;
@@ -9,9 +7,6 @@ using Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Shapes;
-using Avalonia.Layout;
-
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace AvaloniaApplication1.Controls
@@ -21,57 +16,44 @@ namespace AvaloniaApplication1.Controls
     /// </summary>
     public class TickMarks : RangeBase
     {
-        /// <summary>
-        /// How many values does one pixel represent.
-        /// </summary>
-        public double Density { get; protected set; }
-
-        protected Canvas? Canvas;
-
         static TickMarks()
         {
-            AffectsRender<TickBar>(
-                BoundsProperty,
-                MajorTickBrushProperty,
-                MinorTickBrushProperty,
+            AffectsArrange<TickMarks>(
                 MaximumProperty,
                 MinimumProperty,
                 LargeChangeProperty,
-                SmallChangeProperty,
+                SmallChangeProperty
+            );
+
+            AffectsRender<TickMarks>(
+                BoundsProperty,
+                MajorTickPenProperty,
+                MinorTickPenProperty,
                 MajorTicksProperty,
                 MinorTicksProperty
             );
         }
 
-        public static readonly StyledProperty<decimal> MajorTickStartProperty = AvaloniaProperty.Register<TickBar, decimal>(nameof(MajorTickStart));
-        public static readonly StyledProperty<IBrush> MajorTickBrushProperty = AvaloniaProperty.Register<TickBar, IBrush>(nameof(MajorTickBrush), SolidColorBrush.Parse("Black"));
-        public static readonly StyledProperty<double> MajorTickWidthProperty = AvaloniaProperty.Register<TickBar, double>(nameof(MajorTickWidth), 2);
-        public static readonly StyledProperty<double> MajorTickInnerProperty = AvaloniaProperty.Register<TickBar, double>(nameof(MajorTickInner), 0);
-        public static readonly StyledProperty<double> MajorTickOuterProperty = AvaloniaProperty.Register<TickBar, double>(nameof(MajorTickOuter), 100);
+        public static readonly StyledProperty<IPen> MajorTickPenProperty = AvaloniaProperty.Register<TickMarks, IPen>(nameof(MajorTickPen), new Pen(SolidColorBrush.Parse("Black")));
+        public static readonly StyledProperty<IPen> MinorTickPenProperty = AvaloniaProperty.Register<TickMarks, IPen>(nameof(MinorTickPen), new Pen(SolidColorBrush.Parse("Silver")));
+        public static readonly StyledProperty<bool> RenderMinorTickAtMajorTickProperty = AvaloniaProperty.Register<TickMarks, bool>(nameof(RenderMinorTickAtMajorTick));
 
-        public static readonly StyledProperty<decimal> MinorTickStartProperty = AvaloniaProperty.Register<TickBar, decimal>(nameof(MinorTickStart));
-        public static readonly StyledProperty<IBrush> MinorTickBrushProperty = AvaloniaProperty.Register<TickBar, IBrush>(nameof(MinorTickBrush), SolidColorBrush.Parse("Black"));
-        public static readonly StyledProperty<double> MinorTickWidthProperty = AvaloniaProperty.Register<TickBar, double>(nameof(MinorTickWidth), 1);
-        public static readonly StyledProperty<double> MinorTickInnerProperty = AvaloniaProperty.Register<TickBar, double>(nameof(MinorTickInner), 0);
-        public static readonly StyledProperty<double> MinorTickOuterProperty = AvaloniaProperty.Register<TickBar, double>(nameof(MinorTickOuter), 75);
-        public static readonly StyledProperty<bool> RenderMinorTickAtMajorTickProperty = AvaloniaProperty.Register<TickBar, bool>(nameof(RenderMinorTickAtMajorTick));
+        public static readonly StyledProperty<double> MajorTickInnerProperty = AvaloniaProperty.Register<TickMarks, double>(nameof(MajorTickInner), 0);
+        public static readonly StyledProperty<double> MajorTickOuterProperty = AvaloniaProperty.Register<TickMarks, double>(nameof(MajorTickOuter), 100);
+        
+        public static readonly StyledProperty<double> MinorTickInnerProperty = AvaloniaProperty.Register<TickMarks, double>(nameof(MinorTickInner), 0);
+        public static readonly StyledProperty<double> MinorTickOuterProperty = AvaloniaProperty.Register<TickMarks, double>(nameof(MinorTickOuter), 75);
 
-        public decimal MajorTickStart
+        public IPen MajorTickPen
         {
-            get => GetValue(MajorTickStartProperty);
-            set => SetValue(MajorTickStartProperty, value);
+            get => GetValue(MajorTickPenProperty);
+            set => SetValue(MajorTickPenProperty, value);
         }
 
-        public IBrush MajorTickBrush
+        public IPen MinorTickPen
         {
-            get => GetValue(MajorTickBrushProperty);
-            set => SetValue(MajorTickBrushProperty, value);
-        }
-
-        public double MajorTickWidth
-        {
-            get => GetValue(MajorTickWidthProperty);
-            set => SetValue(MajorTickWidthProperty, value);
+            get => GetValue(MinorTickPenProperty);
+            set => SetValue(MinorTickPenProperty, value);
         }
 
         public double MajorTickInner
@@ -84,24 +66,6 @@ namespace AvaloniaApplication1.Controls
         {
             get => GetValue(MajorTickOuterProperty);
             set => SetValue(MajorTickOuterProperty, value);
-        }
-
-        public decimal MinorTickStart
-        {
-            get => GetValue(MinorTickStartProperty);
-            set => SetValue(MinorTickStartProperty, value);
-        }
-
-        public IBrush MinorTickBrush
-        {
-            get => GetValue(MinorTickBrushProperty);
-            set => SetValue(MinorTickBrushProperty, value);
-        }
-
-        public double MinorTickWidth
-        {
-            get => GetValue(MinorTickWidthProperty);
-            set => SetValue(MinorTickWidthProperty, value);
         }
 
         public double MinorTickInner
@@ -129,14 +93,21 @@ namespace AvaloniaApplication1.Controls
         {
             Debug.WriteLine("Control is applying template.");
 
-            Canvas = e.NameScope.Find<Canvas>("PART_Canvas");
-
             UpdateTicks();
 
             base.OnApplyTemplate(e);
         }
 
-        public static readonly StyledProperty<AvaloniaList<double>?> MajorTicksProperty = AvaloniaProperty.Register<TickBar, AvaloniaList<double>?>(nameof(MajorTicks));
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            Debug.WriteLine($"Control is now {finalSize.Width} x {finalSize.Height}");
+
+            UpdateTicks();
+
+            return base.ArrangeOverride(finalSize);
+        }
+
+        public static readonly StyledProperty<AvaloniaList<double>?> MajorTicksProperty = AvaloniaProperty.Register<TickMarks, AvaloniaList<double>?>(nameof(MajorTicks));
 
         public AvaloniaList<double>? MajorTicks
         {
@@ -144,23 +115,12 @@ namespace AvaloniaApplication1.Controls
             set => SetValue(MajorTicksProperty, value);
         }
 
-        public static readonly StyledProperty<AvaloniaList<double>?> MinorTicksProperty = AvaloniaProperty.Register<TickBar, AvaloniaList<double>?>(nameof(MinorTicks));
+        public static readonly StyledProperty<AvaloniaList<double>?> MinorTicksProperty = AvaloniaProperty.Register<TickMarks, AvaloniaList<double>?>(nameof(MinorTicks));
 
         public AvaloniaList<double>? MinorTicks
         {
             get => GetValue(MinorTicksProperty);
             set => SetValue(MinorTicksProperty, value);
-        }
-
-        protected override Size ArrangeOverride(Size finalSize)
-        {
-            Debug.WriteLine($"Control is now {finalSize.Width} x {finalSize.Height}");
-
-            Density = finalSize.Width / (Maximum - Minimum);
-
-            UpdateTicks();
-
-            return base.ArrangeOverride(finalSize);
         }
 
         protected void UpdateTicks()
@@ -190,30 +150,31 @@ namespace AvaloniaApplication1.Controls
         {
             var size = new Size(Bounds.Width, Bounds.Height);
 
-            if (MathUtilities.GreaterThanOrClose(0, size.Width)) return;
+            var horizontal = Bounds.Width / (Maximum - Minimum);
+            var vertical = Bounds.Height / 100;
 
-            var smallPen = new Pen(MinorTickBrush);
+            if (MathUtilities.GreaterThanOrClose(0, size.Width) || MathUtilities.GreaterThanOrClose(0, size.Height)) return;
+
             if (MinorTicks != null)
             {
                 foreach (var minor in MinorTicks)
                 {
                     dc.DrawLine(
-                        smallPen,
-                        new Point((minor - Minimum) * Density, MinorTickInner),
-                        new Point((minor - Minimum) * Density, MinorTickOuter)
+                        MinorTickPen,
+                        new Point((minor - Minimum) * horizontal, MinorTickInner * vertical),
+                        new Point((minor - Minimum) * horizontal, MinorTickOuter * vertical)
                     );
                 }
             }
 
-            var largePen = new Pen(MajorTickBrush);
             if (MajorTicks != null)
             {
                 foreach (var major in MajorTicks)
                 {
                     dc.DrawLine(
-                        largePen,
-                        new Point((major - Minimum) * Density, MajorTickInner),
-                        new Point((major - Minimum) * Density, MajorTickOuter)
+                        MajorTickPen,
+                        new Point((major - Minimum) * horizontal, MajorTickInner * vertical),
+                        new Point((major - Minimum) * horizontal, MajorTickOuter * vertical)
                     );
                 }
             }

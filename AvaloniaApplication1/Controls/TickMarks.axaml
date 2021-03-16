@@ -7,14 +7,14 @@
                 <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" SmallChange="10" LargeChange="25" />
                 <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" LargeChange="25" />
                 <controls:TickMarks Height="10" ClipToBounds="True" Minimum="0" Maximum="100" MajorTicks="0, 100" />
-                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="10000" Maximum="100000" LargeChange="10000" SmallChange="2000" MinorTickBrush="orange" />
+                <controls:TickMarks Height="10" ClipToBounds="True" Minimum="10000" Maximum="100000" LargeChange="10000" SmallChange="2000" />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
 
     <Style Selector="controls|TickMarks">
 
-        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Background" Value="{TemplateBinding Background}" />
 
         <Setter Property="Template">

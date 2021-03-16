@@ -8,7 +8,6 @@
         x:Class="AvaloniaApplication1.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaApplication1">
-
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
@@ -16,7 +15,13 @@
     <StackPanel Margin="50 20">
 
         <StackPanel Orientation="Vertical">
-            <controls:TickMarks Height="10" ClipToBounds="True" Minimum="10000" Maximum="100000" LargeChange="10000" SmallChange="2000" />
+            <controls:TickMarks
+                Height="10"
+                Minimum="10000"
+                Maximum="100000"
+                LargeChange="10000"
+                SmallChange="2000"
+            />
             <controls:NumberedTicks
                 Margin="0"
                 Minimum="0"
@@ -27,26 +32,29 @@
                 Height="20"
             />
             <controls:TickMarks
+                Height="20"
                 Minimum="0"
                 Maximum="100"
+                MajorTicks="0,50,100"
                 SmallChange="10"
                 LargeChange="20"
-                MajorTickBrush="Orange"
-                MajorTickOuter="20"
-                MinorTickOuter="7"
-                MinorTickBrush="Red"
-                Height="20"
-                ClipToBounds="False"
+                MajorTickPen="{DynamicResource RedPen}"
+                MajorTickOuter="100"
+                MinorTickOuter="50"
                 RenderMinorTickAtMajorTick="False"
-            />
+            >
+                <controls:TickMarks.Resources>
+                    <Pen x:Key="RedPen" Brush="Red" Thickness="5" />
+                </controls:TickMarks.Resources>
+            </controls:TickMarks>
         </StackPanel>
         <controls:Slider Height="50" Background="Transparent" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenConfirmed">
-            <Border Width="40" Height="30" Background="Red">
+            <Border Width="40" Height="30" Background="Red" BorderBrush="Yellow" BorderThickness="5" CornerRadius="10">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
             </Border>
         </controls:Slider>
 
-        <!--<controls:NumberedTicks
+        <controls:NumberedTicks
             Margin="20"
             Background="Yellow"
             Minimum="0"
@@ -119,7 +127,7 @@
                 </Ellipse>
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
             </Panel>
-        </controls:Slider>-->
+        </controls:Slider>
 
         <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
 

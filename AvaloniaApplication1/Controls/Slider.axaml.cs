@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
@@ -62,6 +63,15 @@ namespace AvaloniaApplication1.Controls
         /// How many values does one pixel represent.
         /// </summary>
         public double Density { get; protected set; } = double.NaN;
+
+        /// <summary>
+        /// Whether the value is snapped to the nearest SmallTick.
+        /// </summary>
+        public bool SnapToTick
+        {
+            get => GetValue(SnapToTickProperty);
+            set => SetValue(SnapToTickProperty, value);
+        }
 
         /// <summary>
         /// Whether the control is normal, dragging or confirming.
@@ -173,11 +183,11 @@ namespace AvaloniaApplication1.Controls
             }
         }
 
+        public static readonly StyledProperty<bool> SnapToTickProperty = AvaloniaProperty.Register<Slider, bool>(nameof(SnapToTick), true);
         public static readonly StyledProperty<SliderState> StateProperty = AvaloniaProperty.Register<Slider, SliderState>(nameof(State));
         public static readonly StyledProperty<SliderApplyValueChange> ApplyValueChangeProperty = AvaloniaProperty.Register<Slider, SliderApplyValueChange>(nameof(ApplyValueChange));
         public static readonly StyledProperty<IControl?> ContentProperty = AvaloniaProperty.Register<Slider, IControl?>(nameof(Content));
         public static readonly StyledProperty<IControl?> PopupProperty = AvaloniaProperty.Register<Slider, IControl?>(nameof(Popup));
-
         public static readonly StyledProperty<double> BeforeWidthProperty = AvaloniaProperty.Register<Slider, double>(nameof(BeforeWidth));
         public static readonly StyledProperty<double> AfterWidthProperty = AvaloniaProperty.Register<Slider, double>(nameof(AfterWidth));
         public static readonly StyledProperty<double> ThumbWidthProperty = AvaloniaProperty.Register<Slider, double>(nameof(ThumbWidth));
@@ -276,12 +286,12 @@ namespace AvaloniaApplication1.Controls
             switch (ApplyValueChange)
             {
                 case SliderApplyValueChange.WhenDragging:
-                    Value = e.Vector.X / Density;
+                    Value = SnapValueToTick(e.Vector.X / Density);
                     UnconfirmedValue = Value;
                     break;
                 case SliderApplyValueChange.WhenConfirmed:
                 case SliderApplyValueChange.WhenReleased:
-                    UnconfirmedValue = e.Vector.X / Density;
+                    UnconfirmedValue = SnapValueToTick(e.Vector.X / Density);
                     break;
             }
 
@@ -300,13 +310,13 @@ namespace AvaloniaApplication1.Controls
             {
                 case SliderApplyValueChange.WhenReleased:
                 case SliderApplyValueChange.WhenDragging:
-                    Value = e.Vector.X / Density;
+                    Value = SnapValueToTick(e.Vector.X / Density);
                     UnconfirmedValue = Value;
                     State = SliderState.Idle;
                     Ghost.IsVisible = false;
                     break;
                 case SliderApplyValueChange.WhenConfirmed:
-                    UnconfirmedValue = e.Vector.X / Density;
+                    UnconfirmedValue = SnapValueToTick(e.Vector.X / Density);
                     State = SliderState.Confirming;
                     break;
             }
@@ -415,7 +425,7 @@ namespace AvaloniaApplication1.Controls
                         if (!Ghost.IsVisible) RenderGhost(Thumb, Ghost);
                         Thumb.WhenAnyValue(x => x.Bounds).Subscribe(_ => PositionPopup());
                         State = SliderState.Confirming;
-                        UnconfirmedValue += change;
+                        UnconfirmedValue = SnapValueToTick(UnconfirmedValue + change);
                         break;
                 }
             }
@@ -430,6 +440,55 @@ namespace AvaloniaApplication1.Controls
             var vb = new VisualBrush(thumb);
             ghost.Background = vb;
             ghost.IsVisible = true;
+        }
+
+
+        /// <summary>
+        /// Snap the input 'value' to the closest tick.
+        /// </summary>
+        /// <param name="value">Value that want to snap to closest Tick.</param>
+        private double SnapValueToTick(double value)
+        {
+            if (SnapToTick)
+            {
+                var previous = Minimum;
+                var next = Maximum;
+
+                // This property is rarely set so let's try to avoid the GetValue
+                List<int>? ticks = null;
+
+                // If ticks collection is available, use it.
+                // Note that ticks may be unsorted.
+                if (ticks != null && ticks.Count > 0)
+                {
+                    foreach (var tick in ticks)
+                    {
+                        if (MathUtilities.AreClose(tick, value))
+                        {
+                            return value;
+                        }
+
+                        if (MathUtilities.LessThan(tick, value) && MathUtilities.GreaterThan(tick, previous))
+                        {
+                            previous = tick;
+                        }
+                        else if (MathUtilities.GreaterThan(tick, value) && MathUtilities.LessThan(tick, next))
+                        {
+                            next = tick;
+                        }
+                    }
+                }
+                else if (MathUtilities.GreaterThan(SmallChange, 0.0))
+                {
+                    previous = Minimum + Math.Round((value - Minimum) / SmallChange) * SmallChange;
+                    next = Math.Min(Maximum, previous + SmallChange);
+                }
+
+                // Choose the closest value between previous and next. If tie, snap to 'next'.
+                value = MathUtilities.GreaterThanOrClose(value, (previous + next) * 0.5) ? next : previous;
+            }
+
+            return value;
         }
     }
 }
