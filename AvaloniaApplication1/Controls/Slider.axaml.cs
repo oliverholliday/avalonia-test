@@ -442,53 +442,49 @@ namespace AvaloniaApplication1.Controls
             ghost.IsVisible = true;
         }
 
-
         /// <summary>
         /// Snap the input 'value' to the closest tick.
         /// </summary>
         /// <param name="value">Value that want to snap to closest Tick.</param>
         private double SnapValueToTick(double value)
         {
-            if (SnapToTick)
+            if (!SnapToTick) return value;
+
+            var previous = Minimum;
+            var next = Maximum;
+
+            // This property is rarely set so let's try to avoid the GetValue
+            List<int>? ticks = null;
+
+            // If ticks collection is available, use it.
+            // Note that ticks may be unsorted.
+            if (ticks != null && ticks.Count > 0)
             {
-                var previous = Minimum;
-                var next = Maximum;
-
-                // This property is rarely set so let's try to avoid the GetValue
-                List<int>? ticks = null;
-
-                // If ticks collection is available, use it.
-                // Note that ticks may be unsorted.
-                if (ticks != null && ticks.Count > 0)
+                foreach (var tick in ticks)
                 {
-                    foreach (var tick in ticks)
+                    if (MathUtilities.AreClose(tick, value))
                     {
-                        if (MathUtilities.AreClose(tick, value))
-                        {
-                            return value;
-                        }
+                        return value;
+                    }
 
-                        if (MathUtilities.LessThan(tick, value) && MathUtilities.GreaterThan(tick, previous))
-                        {
-                            previous = tick;
-                        }
-                        else if (MathUtilities.GreaterThan(tick, value) && MathUtilities.LessThan(tick, next))
-                        {
-                            next = tick;
-                        }
+                    if (MathUtilities.LessThan(tick, value) && MathUtilities.GreaterThan(tick, previous))
+                    {
+                        previous = tick;
+                    }
+                    else if (MathUtilities.GreaterThan(tick, value) && MathUtilities.LessThan(tick, next))
+                    {
+                        next = tick;
                     }
                 }
-                else if (MathUtilities.GreaterThan(SmallChange, 0.0))
-                {
-                    previous = Minimum + Math.Round((value - Minimum) / SmallChange) * SmallChange;
-                    next = Math.Min(Maximum, previous + SmallChange);
-                }
-
-                // Choose the closest value between previous and next. If tie, snap to 'next'.
-                value = MathUtilities.GreaterThanOrClose(value, (previous + next) * 0.5) ? next : previous;
+            }
+            else if (MathUtilities.GreaterThan(SmallChange, 0.0))
+            {
+                previous = Minimum + Math.Round((value - Minimum) / SmallChange) * SmallChange;
+                next = Math.Min(Maximum, previous + SmallChange);
             }
 
-            return value;
+            // Choose the closest value between previous and next. If tie, snap to 'next'.
+            return MathUtilities.GreaterThanOrClose(value, (previous + next) * 0.5) ? next : previous;
         }
     }
 }
