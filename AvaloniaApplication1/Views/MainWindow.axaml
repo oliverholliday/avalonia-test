@@ -20,6 +20,9 @@
                     <Setter Property="Height" Value="2" />
                     <Setter Property="Background" Value="Transparent" />
                 </Style>
+                <Style Selector="Panel#Controls">
+                    <Setter Property="Margin" Value="0 20 0 0" />
+                </Style>
             </controls:Slider.Styles>
             <controls:Slider.Thumb>
                 <Border Width="40" Height="30" Background="Red" BorderBrush="Yellow" BorderThickness="5" CornerRadius="10">
