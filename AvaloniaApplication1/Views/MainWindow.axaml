@@ -14,7 +14,7 @@
 
     <StackPanel Margin="50 20">
 
-        <controls:Slider Height="70" Background="Green" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenConfirmed">
+        <controls:Slider Height="60" SmallChange="10" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenConfirmed">
             <controls:Slider.Styles>
                 <Style Selector="Button.TrackButton">
                     <Setter Property="Height" Value="2" />
@@ -43,9 +43,8 @@
                     Height="20"
                     Minimum="0"
                     Maximum="100"
-                    MajorTicks="0,50,100"
-                    SmallChange="10"
-                    LargeChange="20"
+                    SmallChange="2"
+                    LargeChange="10"
                     MajorTickPen="{DynamicResource RedPen}"
                     MajorTickOuter="100"
                     MinorTickInner="75"

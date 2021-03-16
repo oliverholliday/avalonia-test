@@ -331,7 +331,7 @@ namespace AvaloniaApplication1.Controls
                     break;
                 case SliderApplyValueChange.WhenConfirmed:
                     UnconfirmedValue = SnapValueToTick(e.Vector.X / Density);
-                    State = SliderState.Confirming;
+                    State = MathUtilities.AreClose(Value, UnconfirmedValue) ? SliderState.Idle : SliderState.Confirming;
                     break;
             }
         }
