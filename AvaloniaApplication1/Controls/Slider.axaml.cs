@@ -262,7 +262,7 @@ namespace AvaloniaApplication1.Controls
             return base.ArrangeOverride(finalSize);
         }
 
-        private void ThumbWidthChanged(Size e)
+        protected void ThumbWidthChanged(Size e)
         {
             Debug.WriteLine($"Thumb width changed {e.Width} x {e.Height}");
 
@@ -273,7 +273,6 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// Called when user start dragging the <see cref="ThumbControl"/>.
         /// </summary>
-        /// <param name="e"></param>
         public virtual void OnThumbDragStarted(VectorEventArgs e)
         {
             Debug.WriteLine($"Started dragging {e.Vector.X}, {e.Vector.Y}");
@@ -292,7 +291,6 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// Called when user drags the <see cref="ThumbControl"/>.
         /// </summary>
-        /// <param name="e"></param>
         public virtual void OnThumbDragDelta(VectorEventArgs e)
         {
             Debug.WriteLine($"Still dragging {e.Vector.X}, {e.Vector.Y}");
@@ -315,7 +313,6 @@ namespace AvaloniaApplication1.Controls
         /// <summary>
         /// Called when user stop dragging the <see cref="ThumbControl"/>.
         /// </summary>
-        /// <param name="e"></param>
         public virtual void OnThumbDragCompleted(VectorEventArgs e)
         {
             Debug.WriteLine($"Stopped dragging {e.Vector.X}, {e.Vector.Y}");
@@ -336,7 +333,7 @@ namespace AvaloniaApplication1.Controls
             }
         }
 
-        private void OnStateChanged(AvaloniaPropertyChangedEventArgs args)
+        protected void OnStateChanged(AvaloniaPropertyChangedEventArgs args)
         {
             if (Popup != null && args.NewValue is SliderState state)
             {
@@ -351,7 +348,7 @@ namespace AvaloniaApplication1.Controls
             }
         }
 
-        private void OpenPopup()
+        protected void OpenPopup()
         {
             if (Popup == null) return;
 
@@ -368,14 +365,14 @@ namespace AvaloniaApplication1.Controls
             PopupHost.Show();
         }
 
-        private void PositionPopup()
+        protected void PositionPopup()
         {
             if (Popup == null || PopupHost == null) return;
             var centeringOffset = (ThumbControl.Bounds.Width - Popup.Bounds.Width) / 2;
             PopupHost.ConfigurePosition(ThumbControl, PlacementMode.Top, new Point(centeringOffset, 0));
         }
 
-        private void ClosePopup()
+        protected void ClosePopup()
         {
             if (PopupHost == null) return;
             PopupHost.SetChild(null);
@@ -460,7 +457,7 @@ namespace AvaloniaApplication1.Controls
         /// Snap the input 'value' to the closest tick.
         /// </summary>
         /// <param name="value">Value that want to snap to closest Tick.</param>
-        private double SnapValueToTick(double value)
+        protected double SnapValueToTick(double value)
         {
             if (!SnapToTick) return value;
 
