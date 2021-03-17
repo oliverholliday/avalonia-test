@@ -298,12 +298,12 @@ namespace AvaloniaApplication1.Controls
             switch (ApplyValueChange)
             {
                 case SliderApplyValueChange.WhenDragging:
-                    Value = SnapValueToTick(e.Vector.X / Density);
+                    Value = SnapValueToTick(Minimum + (e.Vector.X / Density));
                     UnconfirmedValue = Value;
                     break;
                 case SliderApplyValueChange.WhenConfirmed:
                 case SliderApplyValueChange.WhenReleased:
-                    UnconfirmedValue = SnapValueToTick(e.Vector.X / Density);
+                    UnconfirmedValue = SnapValueToTick(Minimum + (e.Vector.X / Density));
                     break;
             }
 
@@ -321,13 +321,13 @@ namespace AvaloniaApplication1.Controls
             {
                 case SliderApplyValueChange.WhenReleased:
                 case SliderApplyValueChange.WhenDragging:
-                    Value = SnapValueToTick(e.Vector.X / Density);
+                    Value = SnapValueToTick(Minimum + (e.Vector.X / Density));
                     UnconfirmedValue = Value;
                     State = SliderState.Idle;
                     Ghost.IsVisible = false;
                     break;
                 case SliderApplyValueChange.WhenConfirmed:
-                    UnconfirmedValue = SnapValueToTick(e.Vector.X / Density);
+                    UnconfirmedValue = SnapValueToTick(Minimum + (e.Vector.X / Density));
                     State = MathUtilities.AreClose(Value, UnconfirmedValue) ? SliderState.Idle : SliderState.Confirming;
                     break;
             }

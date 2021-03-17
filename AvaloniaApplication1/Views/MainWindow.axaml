@@ -12,13 +12,21 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <StackPanel Margin="50 20">
+    <StackPanel Margin="100 20" ClipToBounds="False">
 
-        <controls:Slider Height="60" SmallChange="10" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenConfirmed">
+        <controls:Slider 
+            ClipToBounds="False"
+            Minimum="100"
+            Maximum="200"
+            Height="60"
+            SmallChange="10"
+            SnapToTick="True"
+            Value="{Binding Value, Mode = TwoWay}" 
+            ApplyValueChange="WhenConfirmed">
             <controls:Slider.Styles>
                 <Style Selector="Button.TrackButton">
                     <Setter Property="Height" Value="2" />
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Background" Value="Purple" />
                 </Style>
                 <Style Selector="Panel#Controls">
                     <Setter Property="Margin" Value="0 20 0 0" />
@@ -58,7 +66,7 @@
             </Panel>
         </controls:Slider>
 
-        <controls:NumberedTicks
+        <!--<controls:NumberedTicks
             Margin="20"
             Background="Yellow"
             Minimum="0"
@@ -139,7 +147,7 @@
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
                 </Panel>
             </controls:Slider.Thumb>
-        </controls:Slider>
+        </controls:Slider>-->
 
         <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
 
