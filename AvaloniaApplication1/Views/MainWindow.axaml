@@ -4,152 +4,147 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="850"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="250"
         x:Class="AvaloniaApplication1.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication1">
+        Title="AvaloniaApplication1"
+        HorizontalAlignment="Center"
+        Background="Red">
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <StackPanel Margin="100 20" ClipToBounds="False">
+    <Panel HorizontalAlignment="Center" VerticalAlignment="Center" Background="Yellow">
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Vertical" Background="Green" HorizontalAlignment="Center" Width="500">
+                <controls:Slider
+                    Margin="30 10"
+                    ClipToBounds="False"
+                    Minimum="100"
+                    Maximum="200"
+                    SmallChange="10"
+                    SnapToTick="True"
+                    Value="{Binding Value, Mode = TwoWay}"
+                    ApplyValueChange="WhenConfirmed">
+                    <controls:Slider.Styles>
+                        <Style Selector="Button.TrackButton">
+                            <Setter Property="Height" Value="2" />
+                            <Setter Property="Background" Value="Purple" />
+                        </Style>
+                        <Style Selector="Panel#Controls">
+                            <Setter Property="Margin" Value="0 20 0 0" />
+                        </Style>
+                    </controls:Slider.Styles>
+                    <controls:Slider.Thumb>
+                        <Border Width="40" Height="30" Background="Red" BorderBrush="Yellow" BorderThickness="5" CornerRadius="10">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
+                        </Border>
+                    </controls:Slider.Thumb>
+                    <Panel Margin="0, -20, 0, 0">
+                        <controls:NumberedTicks
+                            Margin="0, -20, 0, 0"
+                            Minimum="0"
+                            Maximum="100"
+                            Foreground="Red"
+                            FontWeight="Bold"
+                            Height="20" />
+                        <controls:TickMarks
+                            Margin="0, 20, 0, 0"
+                            Height="20"
+                            Minimum="0"
+                            Maximum="100"
+                            SmallChange="2"
+                            LargeChange="10"
+                            MajorTickPen="{DynamicResource RedPen}"
+                            MajorTickOuter="100"
+                            MinorTickInner="75"
+                            MinorTickOuter="100"
+                            RenderMinorTickAtMajorTick="False">
+                            <controls:TickMarks.Resources>
+                                <Pen x:Key="RedPen" Brush="Red" Thickness="1" />
+                            </controls:TickMarks.Resources>
+                        </controls:TickMarks>
+                    </Panel>
+                </controls:Slider>
 
-        <controls:Slider 
-            ClipToBounds="False"
-            Minimum="100"
-            Maximum="200"
-            Height="60"
-            SmallChange="10"
-            SnapToTick="True"
-            Value="{Binding Value, Mode = TwoWay}" 
-            ApplyValueChange="WhenConfirmed">
-            <controls:Slider.Styles>
-                <Style Selector="Button.TrackButton">
-                    <Setter Property="Height" Value="2" />
-                    <Setter Property="Background" Value="Purple" />
-                </Style>
-                <Style Selector="Panel#Controls">
-                    <Setter Property="Margin" Value="0 20 0 0" />
-                </Style>
-            </controls:Slider.Styles>
-            <controls:Slider.Thumb>
-                <Border Width="40" Height="30" Background="Red" BorderBrush="Yellow" BorderThickness="5" CornerRadius="10">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
-                </Border>
-            </controls:Slider.Thumb>
-            <Panel Margin="0, -20, 0, 0">
-                <controls:NumberedTicks
-                    Margin="0, -20, 0, 0"
-                    Minimum="0"
-                    Maximum="100"
-                    Foreground="Red"
-                    FontWeight="Bold"
-                    Height="20"
-                />
-                <controls:TickMarks
-                    Margin="0, 20, 0, 0"
-                    Height="20"
-                    Minimum="0"
-                    Maximum="100"
-                    SmallChange="2"
-                    LargeChange="10"
-                    MajorTickPen="{DynamicResource RedPen}"
-                    MajorTickOuter="100"
-                    MinorTickInner="75"
-                    MinorTickOuter="100"
-                    RenderMinorTickAtMajorTick="False"
-                >
-                    <controls:TickMarks.Resources>
-                        <Pen x:Key="RedPen" Brush="Red" Thickness="1" />
-                    </controls:TickMarks.Resources>
-                </controls:TickMarks>
-            </Panel>
-        </controls:Slider>
+                <controls:Slider Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenDragging">
+                    <controls:Slider.Thumb>
+                        <Border Width="40" Height="30" Background="Orange">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue,  StringFormat={}{0:##0}}" />
+                        </Border>
+                    </controls:Slider.Thumb>
+                    <controls:NumberedTicks
+                        Minimum="0"
+                        Maximum="100"
+                        LargeChange="10"
+                        TickLabelFormat="0" />
+                </controls:Slider>
 
-        <!--<controls:NumberedTicks
-            Margin="20"
-            Background="Yellow"
-            Minimum="0"
-            Maximum="100"
-            LargeChange="10"
-            TickLabelFormat="0"
-        />
+                <controls:Slider Height="50" Background="Transparent" Margin="30" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenReleased">
+                    <controls:Slider.Thumb>
+                        <Border Width="40" Height="30" Background="Purple">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
+                        </Border>
+                    </controls:Slider.Thumb>
+                </controls:Slider>
 
-        <controls:Slider Height="50" Background="Transparent" Margin="20" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenDragging">
-            <controls:Slider.Thumb>
-                <Border Width="40" Height="30" Background="Orange">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue,  StringFormat={}{0:##0}}" />
-                </Border>
-            </controls:Slider.Thumb>
-        </controls:Slider>
+                <controls:Slider ApplyValueChange="WhenConfirmed" Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+                    <controls:Slider.Popup>
+                        <Border BorderBrush="Red" BorderThickness="5" Background="Blue" MinHeight="0">
+                            <StackPanel>
+                                <TextBlock Text="hello" FontWeight="Bold" />
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
+                                <UniformGrid HorizontalAlignment="Stretch" Rows="1">
+                                    <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
+                                    <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+                    </controls:Slider.Popup>
+                    <controls:Slider.Thumb>
+                        <Border Width="100" Height="30" Background="Red">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue, StringFormat={}{0:##0}}" />
+                        </Border>
+                    </controls:Slider.Thumb>
+                    <controls:NumberedTicks
+                        Background="Yellow"
+                        Minimum="0"
+                        Maximum="100"
+                        LargeChange="10"
+                        TickLabelFormat="0"
+                    />
+                </controls:Slider>
 
+                <controls:Slider Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
+                    <controls:Slider.Thumb>
+                        <Panel>
+                            <Ellipse Width="30" Height="30" Fill="Orange">
+                                <Ellipse.Styles>
+                                    <Style Selector="Ellipse">
+                                        <Style.Animations>
+                                            <Animation Duration="0:0:4" IterationCount="Infinite">
+                                                <KeyFrame KeyTime="0:0:0">
+                                                    <Setter Property="Width" Value="50" />
+                                                </KeyFrame>
+                                                <KeyFrame KeyTime="0:0:2" >
+                                                    <Setter Property="Width" Value="20" />
+                                                </KeyFrame>
+                                                <KeyFrame KeyTime="0:0:4" >
+                                                    <Setter Property="Width" Value="50" />
+                                                </KeyFrame>
+                                            </Animation>
+                                        </Style.Animations>
+                                    </Style>
+                                </Ellipse.Styles>
+                            </Ellipse>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
+                        </Panel>
+                    </controls:Slider.Thumb>
+                </controls:Slider>
 
-        <controls:NumberedTicks
-            Margin="30"
-            Background="Yellow"
-            Minimum="0"
-            Maximum="100"
-            LargeChange="10"
-            TickLabelFormat="0"
-        />
+                <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
 
-
-        <controls:Slider Height="50" Background="Transparent" Margin="30" Value="{Binding Value, Mode = TwoWay}" ApplyValueChange="WhenReleased">
-            <controls:Slider.Thumb>
-                <Border Width="40" Height="30" Background="Purple">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
-                </Border>
-            </controls:Slider.Thumb>
-        </controls:Slider>
-
-        <controls:Slider ApplyValueChange="WhenConfirmed" Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
-            <controls:Slider.Popup>
-                <Border BorderBrush="Red" BorderThickness="5" Background="Blue" MinHeight="0">
-                    <StackPanel>
-                        <TextBlock Text="hello" FontWeight="Bold" />
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue}" />
-                        <UniformGrid HorizontalAlignment="Stretch" Rows="1">
-                            <Button HorizontalAlignment="Stretch" IsCancel="True">Cancel</Button>
-                            <Button HorizontalAlignment="Stretch" IsDefault="True">OK</Button>
-                        </UniformGrid>
-                    </StackPanel>
-                </Border>
-            </controls:Slider.Popup>
-            <controls:Slider.Thumb>
-                <Border Width="100" Height="30" Background="Red">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding $parent[controls:Slider].UnconfirmedValue, StringFormat={}{0:##0}}" />
-                </Border>
-            </controls:Slider.Thumb>
-        </controls:Slider>
-
-        <controls:Slider Height="50" Background="Green" Margin="20" Value="{Binding Value, Mode = TwoWay}">
-            <controls:Slider.Thumb>
-                <Panel>
-                    <Ellipse Width="30" Height="30" Fill="Orange">
-                        <Ellipse.Styles>
-                            <Style Selector="Ellipse">
-                                <Style.Animations>
-                                    <Animation Duration="0:0:4" IterationCount="Infinite">
-                                        <KeyFrame KeyTime="0:0:0">
-                                            <Setter Property="Width" Value="50" />
-                                        </KeyFrame>
-                                        <KeyFrame KeyTime="0:0:2" >
-                                            <Setter Property="Width" Value="20" />
-                                        </KeyFrame>
-                                        <KeyFrame KeyTime="0:0:4" >
-                                            <Setter Property="Width" Value="50" />
-                                        </KeyFrame>
-                                    </Animation>
-                                </Style.Animations>
-                            </Style>
-                        </Ellipse.Styles>
-                    </Ellipse>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, StringFormat={}{0:##0}}" />
-                </Panel>
-            </controls:Slider.Thumb>
-        </controls:Slider>-->
-
-        <TextBlock Text="{Binding Value}" HorizontalAlignment="Center" />
-
-    </StackPanel>
+            </StackPanel>
+        </Viewbox>
+    </Panel>
 </Window>
