@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AvaloniaApplication1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="400"
+        x:Class="AvaloniaApplication1.Views.TestWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AvaloniaApplication1"
+        HorizontalAlignment="Center"
+        Background="Red">
+    <Window.Resources>
+        <LinearGradientBrush x:Key="Gradient" StartPoint="100%,100%" EndPoint="0%,0%">
+            <GradientStop Color="#FF0000" Offset="0"/>
+            <GradientStop Color="#00FF00" Offset="0.5"/>
+            <GradientStop Color="#0000FF" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <UniformGrid Rows="3" Columns="2" Background="Green">
+        <UniformGrid.Styles>
+            <Style Selector="Panel">
+                <Setter Property="Background" Value="Orange" />
+            </Style>
+            <Style Selector="Button">
+                <Setter Property="Background" Value="{DynamicResource Gradient}" />
+            </Style>
+            <Style Selector="Button /template/ ContentPresenter:pointerover">
+                <Setter Property="Background" Value="{DynamicResource Gradient}" />
+            </Style>
+        </UniformGrid.Styles>
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+            <Button Name="Source1">Source1</Button>
+        </Viewbox>
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+            <Panel Name="Target1" />
+        </Viewbox>
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
+            <Button Name="Source2">Source2</Button>
+        </Viewbox>
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+            <Panel Name="Target2" />
+        </Viewbox>
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+            <Button Name="Source3">Source3</Button>
+        </Viewbox>
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
+            <Panel Name="Target3" />
+        </Viewbox>
+    </UniformGrid>
+</Window>
